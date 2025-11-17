@@ -45,7 +45,7 @@ public class UserController {
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     public User updateUser(@Valid @RequestBody User user) {
-        if (user.getId() == null){
+        if (user.getId() == null) {
             throw new ConditionsNotMetException("Id is required");
         }
         if (users.containsKey(user.getId())) {
