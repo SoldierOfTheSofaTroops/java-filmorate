@@ -4,7 +4,6 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import ru.yandex.practicum.filmorate.validation.PastOrPresent;
-import ru.yandex.practicum.filmorate.validation.UserNameValidator;
 import ru.yandex.practicum.filmorate.validation.Whitespace;
 
 @Data
