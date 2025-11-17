@@ -42,10 +42,10 @@ public class FilmController {
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     public Film updadeFilm(@Valid @RequestBody Film film) {
-        if (film.getId() == null){
+        if (film.getId() == null) {
             throw new ConditionsNotMetException("Id is required");
         }
-        if (films.containsKey(film.getId())){
+        if (films.containsKey(film.getId())) {
             Film oldFilm = films.get(film.getId());
             oldFilm.setName(film.getName());
             oldFilm.setDescription(film.getDescription());
