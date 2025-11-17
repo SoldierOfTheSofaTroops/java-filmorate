@@ -5,8 +5,6 @@ import lombok.Data;
 import ru.yandex.practicum.filmorate.validation.FilmReleaseDate;
 import ru.yandex.practicum.filmorate.validation.PositiveDuration;
 
-import java.time.Duration;
-
 @Data
 public class Film {
 
