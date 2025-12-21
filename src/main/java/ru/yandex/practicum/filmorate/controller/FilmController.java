@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.controller;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.ConditionsNotMetException;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
@@ -22,26 +23,20 @@ public class FilmController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Film postFilm(@Valid @RequestBody Film film) {
-        Film newFilm = new Film();
-        newFilm.setId(getNextId());
-        newFilm.setName(film.getName());
-        newFilm.setDescription(film.getDescription());
-        newFilm.setReleaseDate(film.getReleaseDate());
-        newFilm.setDuration(film.getDuration());
-        films.put(newFilm.getId(), newFilm);
-        return newFilm;
+    public Film postFilm(@Valid @Validated @RequestBody Film film) {
+        film.setId(getNextId());
+        films.put(film.getId(), film);
+        log.info("Film {} created", film.getId());
+        return film;
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
     public Collection<Film> getFilms() {
         return new ArrayList<>(films.values());
     }
 
     @PutMapping
-    @ResponseStatus(HttpStatus.OK)
-    public Film updadeFilm(@Valid @RequestBody Film film) {
+    public Film updadeFilm(@Valid @Validated @RequestBody Film film) {
         if (film.getId() == null) {
             throw new ConditionsNotMetException("Id is required");
         }

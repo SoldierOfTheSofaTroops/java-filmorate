@@ -5,12 +5,12 @@ import jakarta.validation.Payload;
 
 import java.lang.annotation.*;
 
-@Constraint(validatedBy = PositiveDurationValidator.class)
-@Target({ElementType.FIELD, ElementType.PARAMETER})
+@Constraint(validatedBy = PastOrPresentStringValidator.class)
+@Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface PositiveDuration {
-    String message() default "Duration must be positive";
+public @interface PastOrPresentValidator {
+    String message() default "Birthday must be past or present";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

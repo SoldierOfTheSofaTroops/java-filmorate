@@ -4,11 +4,13 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.ConditionsNotMetException;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,30 +23,29 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<?> createUser(@Valid @RequestBody User user) {
-            User newUser = new User();
-            newUser.setId(getNextId());
-            if (user.getName() == null || user.getName().isEmpty()) {
-                newUser.setName(user.getLogin());
-            } else {
-                newUser.setName(user.getName());
-            }
-            newUser.setLogin(user.getLogin());
-            newUser.setBirthday(user.getBirthday());
-            newUser.setEmail(user.getEmail());
-            users.put(newUser.getId(), newUser);
-            return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
+    public User createUser(@Valid @Validated @RequestBody User user) {
+        log.info("Creating user {}", user);
+        User newUser = new User();
+        newUser.setId(getNextId());
+        if (user.getName() == null || user.getName().isEmpty()) {
+            newUser.setName(user.getLogin());
+        } else {
+            newUser.setName(user.getName());
+        }
+        newUser.setLogin(user.getLogin());
+        newUser.setBirthday(user.getBirthday());
+        newUser.setEmail(user.getEmail());
+        users.put(newUser.getId(), newUser);
+        return newUser;
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> getUsers() {
-        return ResponseEntity.status(200).body(users.values());
+    public Collection<User> getUsers() {
+        return users.values();
     }
 
     @PutMapping
-    @ResponseStatus(HttpStatus.OK)
-    public User updateUser(@Valid @RequestBody User user) {
+    public User updateUser(@Valid @Validated @RequestBody User user) {
         if (user.getId() == null) {
             throw new ConditionsNotMetException("Id is required");
         }

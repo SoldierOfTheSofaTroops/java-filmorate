@@ -1,11 +1,13 @@
 package ru.yandex.practicum.filmorate.model;
 
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import ru.yandex.practicum.filmorate.validation.FilmReleaseDate;
-import ru.yandex.practicum.filmorate.validation.PositiveDuration;
+
 
 @Data
+@AllArgsConstructor
 public class Film {
 
     private Integer id;
@@ -15,6 +17,6 @@ public class Film {
     private String description;
     @FilmReleaseDate
     private String releaseDate;
-    @PositiveDuration
+    @Positive
     private int duration;
 }

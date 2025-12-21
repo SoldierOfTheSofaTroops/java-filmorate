@@ -1,10 +1,9 @@
 package ru.yandex.practicum.filmorate.model;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.*;
 import lombok.*;
-import ru.yandex.practicum.filmorate.validation.PastOrPresent;
-import ru.yandex.practicum.filmorate.validation.Whitespace;
+
+import ru.yandex.practicum.filmorate.validation.PastOrPresentValidator;
 
 @Data
 @NoArgsConstructor
@@ -15,9 +14,9 @@ public class User {
     @Email(message = "Incorrect email address")
     private String email;
     @NotBlank (message = "Login field does not be empty")
-    @Whitespace (message = "Field don't contain whitespace")
+    @Pattern(regexp = "^\\S+$", message = "Login doesn't contain whitespaces")
     private String login;
     private String name;
-    @PastOrPresent
+    @PastOrPresentValidator
     private String birthday;
 }
