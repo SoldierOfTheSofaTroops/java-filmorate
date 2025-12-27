@@ -18,7 +18,7 @@ public class FilmControllerTest {
     private int port;
 
     @Autowired
-    private TestRestTemplate testRestTemplate = new TestRestTemplate();
+    private TestRestTemplate testRestTemplate;
 
     @Test
     public void shouldReturnNotValidException(){
