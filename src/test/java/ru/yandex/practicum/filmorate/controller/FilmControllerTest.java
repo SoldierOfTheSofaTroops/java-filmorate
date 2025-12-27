@@ -30,7 +30,6 @@ public class FilmControllerTest {
                 "Very intresting film",
                 "1895-12-28",
                 120);
-
         ResponseEntity<Film> notValidResponseEntity = testRestTemplate.postForEntity("http://localhost:" + port + "/films", notValidfilm, Film.class);
         assertEquals(HttpStatus.BAD_REQUEST, notValidResponseEntity.getStatusCode());
     }
@@ -42,7 +41,6 @@ public class FilmControllerTest {
                 "Very intresting film",
                 "1895-12-29",
                 120);
-
         ResponseEntity<Film> notValidResponseEntity = testRestTemplate.postForEntity("http://localhost:" + port + "/films", notValidfilm, Film.class);
         assertEquals(HttpStatus.BAD_REQUEST, notValidResponseEntity.getStatusCode());
     }
@@ -54,7 +52,6 @@ public class FilmControllerTest {
                 "Very intresting film",
                 "1895-12-29",
                 -1);
-
         ResponseEntity<Film> notValidResponseEntity = testRestTemplate.postForEntity("http://localhost:" + port + "/films", notValidfilm, Film.class);
         assertEquals(HttpStatus.BAD_REQUEST, notValidResponseEntity.getStatusCode());
     }
@@ -71,7 +68,6 @@ public class FilmControllerTest {
                         "sbvhjgsebakvbjksgv",
                 "1895-12-29",
                 120);
-
         ResponseEntity<Film> notValidResponseEntity = testRestTemplate.postForEntity("http://localhost:" + port + "/films", notValidfilm, Film.class);
         assertEquals(HttpStatus.BAD_REQUEST, notValidResponseEntity.getStatusCode());
     }
@@ -83,7 +79,6 @@ public class FilmControllerTest {
                 "Very intresting film",
                 "1895-12-29",
                 120);
-
         ResponseEntity<Film> validFilmResp = testRestTemplate.postForEntity("http://localhost:" + port + "/films", validFilm, Film.class);
         assertEquals(HttpStatus.CREATED, validFilmResp.getStatusCode());
     }
