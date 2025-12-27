@@ -7,6 +7,7 @@ import ru.yandex.practicum.filmorate.validation.PastOrPresentValidator;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     private Integer id;
