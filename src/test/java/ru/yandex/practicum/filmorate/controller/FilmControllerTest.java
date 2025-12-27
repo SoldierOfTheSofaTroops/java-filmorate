@@ -75,4 +75,16 @@ public class FilmControllerTest {
         ResponseEntity<Film> notValidResponseEntity = testRestTemplate.postForEntity("http://localhost:" + port + "/films", notValidfilm, Film.class);
         assertEquals(HttpStatus.BAD_REQUEST, notValidResponseEntity.getStatusCode());
     }
+
+    @Test
+    public void shouldReturnFilmCreated(){
+        Film validFilm = new Film(0,
+                "Some film",
+                "Very intresting film",
+                "1895-12-29",
+                120);
+
+        ResponseEntity<Film> validFilmResp = testRestTemplate.postForEntity("http://localhost:" + port + "/films", validFilm, Film.class);
+        assertEquals(HttpStatus.CREATED, validFilmResp.getStatusCode());
+    }
 }
