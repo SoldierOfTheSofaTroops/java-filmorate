@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import ru.yandex.practicum.filmorate.validation.FilmReleaseDate;
 
+import java.time.LocalDate;
+
 
 @Data
 @AllArgsConstructor
@@ -15,8 +17,9 @@ public class Film {
     private String name;
     @Size(max = 200)
     private String description;
+    @NotNull
     @FilmReleaseDate
-    private String releaseDate;
+    private LocalDate releaseDate;
     @Positive
     private int duration;
 }
