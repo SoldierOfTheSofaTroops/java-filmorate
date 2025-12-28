@@ -22,7 +22,7 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User createUser(@Valid @Validated @RequestBody User user) {
+    public User createUser(@Valid @RequestBody User user) {
         log.info("Creating user {}", user);
         User newUser = new User();
         newUser.setId(getNextId());
@@ -44,7 +44,7 @@ public class UserController {
     }
 
     @PutMapping
-    public User updateUser(@Valid @Validated @RequestBody User user) {
+    public User updateUser(@Valid @RequestBody User user) {
         if (user.getId() == null) {
             throw new ConditionsNotMetException("Id is required");
         }

@@ -23,7 +23,7 @@ public class FilmController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Film postFilm(@Valid @Validated @RequestBody Film film) {
+    public Film postFilm(@Valid @RequestBody Film film) {
         film.setId(getNextId());
         films.put(film.getId(), film);
         log.info("Film {} created", film.getId());
@@ -36,7 +36,7 @@ public class FilmController {
     }
 
     @PutMapping
-    public Film updadeFilm(@Valid @Validated @RequestBody Film film) {
+    public Film updadeFilm(@Valid @RequestBody Film film) {
         if (film.getId() == null) {
             throw new ConditionsNotMetException("Id is required");
         }
