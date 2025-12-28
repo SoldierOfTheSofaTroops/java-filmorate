@@ -24,28 +24,28 @@ public class FilmControllerTest {
     private TestRestTemplate testRestTemplate;
 
     @Test
-    public void shouldReturnNotValidReleaseDate(){
+    public void shouldReturnNotValidReleaseDate() {
         Film notValidfilm = new Film(0, "Some film", "Very intresting film", "1895-12-28", 120);
         ResponseEntity<Film> notValidResponseEntity = testRestTemplate.postForEntity("http://localhost:" + port + "/films", notValidfilm, Film.class);
         assertEquals(HttpStatus.BAD_REQUEST, notValidResponseEntity.getStatusCode());
     }
 
     @Test
-    public void shouldReturnNotValidFilmName(){
+    public void shouldReturnNotValidFilmName() {
         Film notValidfilm = new Film(0, "", "Very intresting film", "1895-12-29", 120);
         ResponseEntity<Film> notValidResponseEntity = testRestTemplate.postForEntity("http://localhost:" + port + "/films", notValidfilm, Film.class);
         assertEquals(HttpStatus.BAD_REQUEST, notValidResponseEntity.getStatusCode());
     }
 
     @Test
-    public void shouldReturnNotValidDuration(){
+    public void shouldReturnNotValidDuration() {
         Film notValidfilm = new Film(0, "Some film", "Very intresting film", "1895-12-29", -1);
         ResponseEntity<Film> notValidResponseEntity = testRestTemplate.postForEntity("http://localhost:" + port + "/films", notValidfilm, Film.class);
         assertEquals(HttpStatus.BAD_REQUEST, notValidResponseEntity.getStatusCode());
     }
 
     @Test
-    public void shouldReturnNotValidDescriptionLength(){
+    public void shouldReturnNotValidDescriptionLength() {
         Film notValidfilm = new Film(0,
                 "Some film",
                 "Veryintrestingfilmwkjbcweihbvciwhebvwhie" +
@@ -61,7 +61,7 @@ public class FilmControllerTest {
     }
 
     @Test
-    public void shouldReturnFilmCreated(){
+    public void shouldReturnFilmCreated() {
         Film validFilm = new Film(0,
                 "Some film",
                 "Very intresting film",
