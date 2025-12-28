@@ -3,7 +3,7 @@ package ru.yandex.practicum.filmorate.model;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
-import ru.yandex.practicum.filmorate.validation.PastOrPresentValidator;
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -18,6 +18,6 @@ public class User {
     @Pattern(regexp = "^\\S+$", message = "Login doesn't contain whitespaces")
     private String login;
     private String name;
-    @PastOrPresentValidator
-    private String birthday;
+    @PastOrPresent
+    private LocalDate birthday;
 }
