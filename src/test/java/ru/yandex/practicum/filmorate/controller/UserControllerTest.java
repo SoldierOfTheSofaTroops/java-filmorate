@@ -24,7 +24,7 @@ public class UserControllerTest {
     private TestRestTemplate testRestTemplate;
 
     @Test
-    public void shouldReturnNotValidEmail(){
+    public void shouldReturnNotValidEmail() {
         User user = new User(0,
                 "user_email",
                 "User",
@@ -36,7 +36,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void shouldReturnNotValidLogin(){
+    public void shouldReturnNotValidLogin() {
         User user = new User(0,
                 "user_email",
                 "",
@@ -48,7 +48,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void loginSouldNotContainsBlanks(){
+    public void loginSouldNotContainsBlanks() {
         User user = new User(0,
                 "user_email",
                 "qwerty qw",
@@ -60,7 +60,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void shouldReturnNotValidBirthday(){
+    public void shouldReturnNotValidBirthday() {
         User user = new User(0,
                 "user_email",
                 "Test_login",
@@ -72,7 +72,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void userWithEmptyName(){
+    public void userWithEmptyName() {
         User user = new User(0,
                 "user@email",
                 "Test_login",
