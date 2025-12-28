@@ -20,6 +20,7 @@ public class Film {
     @NotNull
     @FilmReleaseDate
     private LocalDate releaseDate;
+    @NotNull
     @Positive
     private int duration;
 }

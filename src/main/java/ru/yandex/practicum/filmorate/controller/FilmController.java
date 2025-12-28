@@ -36,7 +36,7 @@ public class FilmController {
     }
 
     @PutMapping
-    public Film updadeFilm(@Valid @RequestBody Film film) {
+    public Film updadeFilm(@RequestBody Film film) {
         if (film.getId() == null) {
             throw new ConditionsNotMetException("Id is required");
         }
