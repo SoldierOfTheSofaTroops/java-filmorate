@@ -12,6 +12,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class Film {
 
+    @Null(groups = )
     private Integer id;
     @NotBlank
     private String name;
