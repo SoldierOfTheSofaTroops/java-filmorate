@@ -22,7 +22,8 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User createUser(@Validated(CreateGroup.onCreate.class) @RequestBody User user) {
+    public User createUser(@Validated(CreateGroup.onCreate.class)
+                           @RequestBody User user) {
         log.info("Creating user {}", user);
         user.setId(getNextId());
         if (user.getName() == null || user.getName().isEmpty()) {
