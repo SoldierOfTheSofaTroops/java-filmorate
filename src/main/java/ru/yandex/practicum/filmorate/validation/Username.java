@@ -8,7 +8,7 @@ public class Username implements ConstraintValidator<UserNameValidator, User> {
 
     @Override
     public boolean isValid(User user, ConstraintValidatorContext constraintValidatorContext) {
-        if (user.getName() == null || user.getName().isEmpty()) {
+        if (user.getName().isEmpty()) {
             user.setName(user.getLogin());
         }
         return true;
