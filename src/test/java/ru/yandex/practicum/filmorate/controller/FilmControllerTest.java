@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.yandex.practicum.filmorate.model.Film;
 
+import java.time.LocalDate;
+
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
@@ -25,21 +27,21 @@ public class FilmControllerTest {
 
     @Test
     public void shouldReturnNotValidReleaseDate() {
-        Film notValidfilm = new Film(0, "Some film", "Very intresting film", "1895-12-28", 120);
+        Film notValidfilm = new Film(0, "Some film", "Very intresting film", LocalDate.parse("1895-12-28"), 120);
         ResponseEntity<Film> notValidResponseEntity = testRestTemplate.postForEntity("http://localhost:" + port + "/films", notValidfilm, Film.class);
         assertEquals(HttpStatus.BAD_REQUEST, notValidResponseEntity.getStatusCode());
     }
 
     @Test
     public void shouldReturnNotValidFilmName() {
-        Film notValidfilm = new Film(0, "", "Very intresting film", "1895-12-29", 120);
+        Film notValidfilm = new Film(0, "", "Very intresting film", LocalDate.parse("1895-12-29"), 120);
         ResponseEntity<Film> notValidResponseEntity = testRestTemplate.postForEntity("http://localhost:" + port + "/films", notValidfilm, Film.class);
         assertEquals(HttpStatus.BAD_REQUEST, notValidResponseEntity.getStatusCode());
     }
 
     @Test
     public void shouldReturnNotValidDuration() {
-        Film notValidfilm = new Film(0, "Some film", "Very intresting film", "1895-12-29", -1);
+        Film notValidfilm = new Film(0, "Some film", "Very intresting film", LocalDate.parse("1895-12-29"), -1);
         ResponseEntity<Film> notValidResponseEntity = testRestTemplate.postForEntity("http://localhost:" + port + "/films", notValidfilm, Film.class);
         assertEquals(HttpStatus.BAD_REQUEST, notValidResponseEntity.getStatusCode());
     }
@@ -54,7 +56,7 @@ public class FilmControllerTest {
                         "cbwiebkjhcbwjkehbcwiekkjbcwiebchwjebcwihbew" +
                         "jhbckjwehcbwibvcjhgdcjhbdkhjvbkjabvhjsbvfhj" +
                         "sbvhjgsebakvbjksgv",
-                "1895-12-29",
+                LocalDate.parse("1895-12-29"),
                 120);
         ResponseEntity<Film> notValidResponseEntity = testRestTemplate.postForEntity("http://localhost:" + port + "/films", notValidfilm, Film.class);
         assertEquals(HttpStatus.BAD_REQUEST, notValidResponseEntity.getStatusCode());
@@ -62,10 +64,10 @@ public class FilmControllerTest {
 
     @Test
     public void shouldReturnFilmCreated() {
-        Film validFilm = new Film(0,
+        Film validFilm = new Film(
                 "Some film",
                 "Very intresting film",
-                "1895-12-29",
+                LocalDate.parse("1895-12-29"),
                 120);
         ResponseEntity<Film> validFilmResp = testRestTemplate.postForEntity("http://localhost:" + port + "/films", validFilm, Film.class);
         assertEquals(HttpStatus.CREATED, validFilmResp.getStatusCode());

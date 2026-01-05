@@ -1,13 +1,13 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.ConditionsNotMetException;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.validation.groups.CreateGroup;
+import ru.yandex.practicum.filmorate.validation.groups.UpdateGroup;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -22,20 +22,14 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User createUser(@Valid @RequestBody User user) {
+    public User createUser(@Validated(CreateGroup.onCreate.class) @RequestBody User user) {
         log.info("Creating user {}", user);
-        User newUser = new User();
-        newUser.setId(getNextId());
+        user.setId(getNextId());
         if (user.getName() == null || user.getName().isEmpty()) {
-            newUser.setName(user.getLogin());
-        } else {
-            newUser.setName(user.getName());
+            user.setName(user.getLogin());
         }
-        newUser.setLogin(user.getLogin());
-        newUser.setBirthday(user.getBirthday());
-        newUser.setEmail(user.getEmail());
-        users.put(newUser.getId(), newUser);
-        return newUser;
+        users.put(user.getId(), user);
+        return user;
     }
 
     @GetMapping
@@ -44,10 +38,7 @@ public class UserController {
     }
 
     @PutMapping
-    public User updateUser(@Valid @RequestBody User user) {
-        if (user.getId() == null) {
-            throw new ConditionsNotMetException("Id is required");
-        }
+    public User updateUser(@Validated(UpdateGroup.onUpdate.class) @RequestBody User user) {
         if (users.containsKey(user.getId())) {
             User oldUser = users.get(user.getId());
             oldUser.setId(user.getId());

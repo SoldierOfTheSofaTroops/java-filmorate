@@ -5,10 +5,10 @@ import jakarta.validation.ConstraintValidatorContext;
 
 import java.time.LocalDate;
 
-public class FilmReleaseDateValidator implements ConstraintValidator<FilmReleaseDate, String> {
+public class FilmReleaseDateValidator implements ConstraintValidator<FilmReleaseDate, LocalDate> {
 
     @Override
-    public boolean isValid(String string, ConstraintValidatorContext constraintValidatorContext) {
-        return LocalDate.parse(string).isAfter(LocalDate.parse("1895-12-28"));
+    public boolean isValid(LocalDate localDate, ConstraintValidatorContext constraintValidatorContext) {
+        return localDate.isAfter(LocalDate.parse("1895-12-28"));
     }
 }

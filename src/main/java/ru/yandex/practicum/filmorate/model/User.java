@@ -12,6 +12,19 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class User {
 
+    public User(String email, String login, String name, LocalDate birthday) {
+        this.email = email;
+        this.login = login;
+        this.name = name;
+        this.birthday = birthday;
+    }
+
+    public User(String email, String login, LocalDate birthday) {
+        this.email = email;
+        this.login = login;
+        this.birthday = birthday;
+    }
+
     @Null (groups = CreateGroup.onCreate.class)
     private Integer id;
 

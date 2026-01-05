@@ -10,11 +10,17 @@ import ru.yandex.practicum.filmorate.validation.groups.UpdateGroup;
 
 import java.time.LocalDate;
 
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Film {
+
+    public Film(String name, String description, LocalDate releaseDate, int duration) {
+        this.name = name;
+        this.description = description;
+        this.releaseDate = releaseDate;
+        this.duration = duration;
+    }
 
     @Null (groups = CreateGroup.onCreate.class)
     @NotNull (groups = UpdateGroup.onUpdate.class)

@@ -1,13 +1,13 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.ConditionsNotMetException;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.validation.groups.CreateGroup;
+import ru.yandex.practicum.filmorate.validation.groups.UpdateGroup;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,7 +23,7 @@ public class FilmController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Film postFilm(@Valid @RequestBody Film film) {
+    public Film postFilm(@Validated(CreateGroup.onCreate.class) @RequestBody Film film) {
         film.setId(getNextId());
         films.put(film.getId(), film);
         log.info("Film {} created", film.getId());
@@ -36,10 +36,7 @@ public class FilmController {
     }
 
     @PutMapping
-    public Film updadeFilm(@RequestBody Film film) {
-        if (film.getId() == null) {
-            throw new ConditionsNotMetException("Id is required");
-        }
+    public Film updadeFilm(@Validated(UpdateGroup.onUpdate.class) @RequestBody Film film) {
         if (films.containsKey(film.getId())) {
             Film oldFilm = films.get(film.getId());
             oldFilm.setName(film.getName());

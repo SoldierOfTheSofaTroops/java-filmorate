@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.yandex.practicum.filmorate.model.User;
 
+import java.time.LocalDate;
+
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
@@ -29,7 +31,7 @@ public class UserControllerTest {
                 "user_email",
                 "User",
                 "Denis",
-                "1987-09-01");
+                LocalDate.parse("1987-09-01"));
 
         ResponseEntity<User> notValidResponseEntity = testRestTemplate.postForEntity("http://localhost:" + port + "/users", user, User.class);
         assertEquals(HttpStatus.BAD_REQUEST, notValidResponseEntity.getStatusCode());
@@ -41,7 +43,7 @@ public class UserControllerTest {
                 "user_email",
                 "",
                 "Denis",
-                "1987-09-01");
+                LocalDate.parse("1987-09-01"));
 
         ResponseEntity<User> notValidResponseEntity = testRestTemplate.postForEntity("http://localhost:" + port + "/users", user, User.class);
         assertEquals(HttpStatus.BAD_REQUEST, notValidResponseEntity.getStatusCode());
@@ -53,7 +55,7 @@ public class UserControllerTest {
                 "user_email",
                 "qwerty qw",
                 "Denis",
-                "1987-09-01");
+                LocalDate.parse("1987-09-01"));
 
         ResponseEntity<User> notValidResponseEntity = testRestTemplate.postForEntity("http://localhost:" + port + "/users", user, User.class);
         assertEquals(HttpStatus.BAD_REQUEST, notValidResponseEntity.getStatusCode());
@@ -65,7 +67,7 @@ public class UserControllerTest {
                 "user_email",
                 "Test_login",
                 "Denis",
-                "2026-09-01");
+                LocalDate.parse("2026-09-01"));
 
         ResponseEntity<User> notValidResponseEntity = testRestTemplate.postForEntity("http://localhost:" + port + "/users", user, User.class);
         assertEquals(HttpStatus.BAD_REQUEST, notValidResponseEntity.getStatusCode());
@@ -73,11 +75,10 @@ public class UserControllerTest {
 
     @Test
     public void userWithEmptyName() {
-        User user = new User(0,
+        User user = new User(
                 "user@email",
                 "Test_login",
-                "",
-                "1987-09-01");
+                LocalDate.parse("1987-09-01"));
 
         ResponseEntity<User> validResponseEntity = testRestTemplate.postForEntity("http://localhost:" + port + "/users", user, User.class);
         Assert.assertNotNull(validResponseEntity.getBody());
