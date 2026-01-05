@@ -23,7 +23,7 @@ public class FilmController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Film postFilm(@Validated(CreateGroup.onCreate.class) @RequestBody Film film) {
+    public Film postFilm(@Validated(CreateGroup.OnCreate.class) @RequestBody Film film) {
         film.setId(getNextId());
         films.put(film.getId(), film);
         log.info("Film {} created", film.getId());
@@ -36,7 +36,7 @@ public class FilmController {
     }
 
     @PutMapping
-    public Film updadeFilm(@Validated(UpdateGroup.onUpdate.class) @RequestBody Film film) {
+    public Film updadeFilm(@Validated(UpdateGroup.OnUpdate.class) @RequestBody Film film) {
         if (films.containsKey(film.getId())) {
             Film oldFilm = films.get(film.getId());
             oldFilm.setName(film.getName());

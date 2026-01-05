@@ -22,21 +22,21 @@ public class Film {
         this.duration = duration;
     }
 
-    @Null (groups = CreateGroup.onCreate.class)
-    @NotNull (groups = UpdateGroup.onUpdate.class)
+    @Null (groups = CreateGroup.OnCreate.class)
+    @NotNull (groups = UpdateGroup.OnUpdate.class)
     private Integer id;
 
-    @NotBlank (groups = CreateGroup.onCreate.class)
+    @NotBlank (groups = CreateGroup.OnCreate.class)
     private String name;
 
-    @Size(max = 200, groups = CreateGroup.onCreate.class)
+    @Size(max = 200, groups = CreateGroup.OnCreate.class)
     private String description;
 
-    @NotNull (groups = CreateGroup.onCreate.class)
-    @FilmReleaseDate (groups = {CreateGroup.onCreate.class, UpdateGroup.onUpdate.class})
+    @NotNull (groups = CreateGroup.OnCreate.class)
+    @FilmReleaseDate (groups = {CreateGroup.OnCreate.class, UpdateGroup.OnUpdate.class})
     private LocalDate releaseDate;
 
-    @NotNull (groups = CreateGroup.onCreate.class)
-    @Positive (groups =  {CreateGroup.onCreate.class, UpdateGroup.onUpdate.class})
+    @NotNull (groups = CreateGroup.OnCreate.class)
+    @Positive (groups =  {CreateGroup.OnCreate.class, UpdateGroup.OnUpdate.class})
     private int duration;
 }

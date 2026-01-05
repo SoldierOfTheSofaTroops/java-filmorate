@@ -22,7 +22,7 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User createUser(@Validated(CreateGroup.onCreate.class)
+    public User createUser(@Validated(CreateGroup.OnCreate.class)
                            @RequestBody User user) {
         log.info("Creating user {}", user);
         user.setId(getNextId());
@@ -39,7 +39,7 @@ public class UserController {
     }
 
     @PutMapping
-    public User updateUser(@Validated(UpdateGroup.onUpdate.class) @RequestBody User user) {
+    public User updateUser(@Validated(UpdateGroup.OnUpdate.class) @RequestBody User user) {
         if (users.containsKey(user.getId())) {
             User oldUser = users.get(user.getId());
             oldUser.setId(user.getId());

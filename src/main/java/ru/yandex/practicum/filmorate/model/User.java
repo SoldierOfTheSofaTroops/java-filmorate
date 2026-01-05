@@ -25,19 +25,19 @@ public class User {
         this.birthday = birthday;
     }
 
-    @Null (groups = CreateGroup.onCreate.class)
+    @Null (groups = CreateGroup.OnCreate.class)
     private Integer id;
 
-    @NotBlank (groups = CreateGroup.onCreate.class)
-    @Email(message = "Incorrect email address", groups = {CreateGroup.onCreate.class, UpdateGroup.onUpdate.class})
+    @NotBlank (groups = CreateGroup.OnCreate.class)
+    @Email(message = "Incorrect email address", groups = {CreateGroup.OnCreate.class, UpdateGroup.OnUpdate.class})
     private String email;
 
-    @NotBlank (message = "Login field does not be empty", groups = CreateGroup.onCreate.class)
-    @Pattern(regexp = "^\\S+$", message = "Login doesn't contain whitespaces", groups = {CreateGroup.onCreate.class, UpdateGroup.onUpdate.class})
+    @NotBlank (message = "Login field does not be empty", groups = CreateGroup.OnCreate.class)
+    @Pattern(regexp = "^\\S+$", message = "Login doesn't contain whitespaces", groups = {CreateGroup.OnCreate.class, UpdateGroup.OnUpdate.class})
     private String login;
 
     private String name;
 
-    @PastOrPresent (groups = {CreateGroup.onCreate.class,  UpdateGroup.onUpdate.class})
+    @PastOrPresent (groups = {CreateGroup.OnCreate.class,  UpdateGroup.OnUpdate.class})
     private LocalDate birthday;
 }
