@@ -2,5 +2,6 @@ package ru.yandex.practicum.filmorate.validation.groups;
 
 public interface CreateGroup{
 
-    interface onCreate{}
+    interface onCreate{
+    }
 }
