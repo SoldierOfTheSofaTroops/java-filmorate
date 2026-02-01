@@ -11,6 +11,7 @@ import ru.yandex.practicum.filmorate.validation.groups.CreateGroup;
 import ru.yandex.practicum.filmorate.validation.groups.UpdateGroup;
 
 import java.util.Collection;
+import java.util.Set;
 
 @Slf4j
 @RestController()
@@ -36,5 +37,10 @@ public class UserController {
     @PutMapping
     public User updateUser(@Validated(UpdateGroup.OnUpdate.class) @RequestBody User user) {
         return userService.updateUser(user);
+    }
+
+    @PutMapping(value = "/{id}/friends/{friendId}")
+    public Set<Long> updateFriend(@PathVariable("id") long id, @PathVariable("friendId") long friendId) {
+        return userService.addToFriend(id, friendId);
     }
 }

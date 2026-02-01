@@ -8,6 +8,7 @@ import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.util.Collection;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -45,16 +46,18 @@ public class UserService implements UserStorage {
         return userStorage.updateUser(user);
     }
 
-    public User addToFriend(User user, long newFriendId){
-        if (newFriendId > 0
+    public Set<Long> addToFriend(long id, long newFriendId){
+        if (newFriendId >= 0
+                && id >= 0
                 && userStorage.isContainsUser(newFriendId)
-                && userStorage.isContainsUser(user.getId())) {
+                && userStorage.isContainsUser(id)) {
+            User friend = getUserById(id);
             User newFriend = userStorage.getUserById(newFriendId);
-            newFriend.getFriends().add(user.getId());
-            user.getFriends().add(newFriendId);
-            userStorage.updateUser(user);
+            newFriend.getFriends().add(friend.getId());
+            friend.getFriends().add(newFriend.getId());
+            userStorage.updateUser(friend);
             userStorage.updateUser(newFriend);
-            return user;
+            return friend.getFriends();
         }
         throw new NotFoundException("User not found");
     }
