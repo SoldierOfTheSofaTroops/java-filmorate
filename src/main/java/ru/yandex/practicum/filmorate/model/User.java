@@ -6,18 +6,12 @@ import ru.yandex.practicum.filmorate.validation.groups.CreateGroup;
 import ru.yandex.practicum.filmorate.validation.groups.UpdateGroup;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
-
-    public User(String email, String login, String name, LocalDate birthday) {
-        this.email = email;
-        this.login = login;
-        this.name = name;
-        this.birthday = birthday;
-    }
 
     public User(String email, String login, LocalDate birthday) {
         this.email = email;
@@ -40,4 +34,7 @@ public class User {
 
     @PastOrPresent (groups = {CreateGroup.OnCreate.class,  UpdateGroup.OnUpdate.class})
     private LocalDate birthday;
+
+    @Null (groups = CreateGroup.OnCreate.class)
+    private Set<Long> friends;
 }
