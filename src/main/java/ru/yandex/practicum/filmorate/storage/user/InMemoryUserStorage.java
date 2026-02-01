@@ -9,7 +9,7 @@ import java.util.*;
 @Component
 public class InMemoryUserStorage implements UserStorage {
 
-    private Map<Integer, User> users = new HashMap<>();
+    private Map<Long, User> users = new HashMap<>();
 
     @Override
     public User createUser(User user) {
@@ -27,7 +27,7 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public User getUserById(int id) {
+    public User getUserById(long id) {
         return users.get(id);
     }
 
@@ -55,12 +55,16 @@ public class InMemoryUserStorage implements UserStorage {
         throw new NotFoundException("User not found");
     }
 
-    private int getNextId() {
-        int currentMaxId = users.keySet()
+    public boolean isContainsUser(long id) {
+        return users.containsKey(id);
+    }
+
+    private long getNextId() {
+        int currentMaxId = Math.toIntExact(users.keySet()
                 .stream()
-                .mapToInt(id -> id)
+                .mapToLong(id -> id)
                 .max()
-                .orElse(0);
+                .orElse(0));
         return ++currentMaxId;
     }
 }

@@ -20,7 +20,7 @@ public class User {
     }
 
     @Null (groups = CreateGroup.OnCreate.class)
-    private Integer id;
+    private Long id;
 
     @NotBlank (groups = CreateGroup.OnCreate.class)
     @Email(message = "Incorrect email address", groups = {CreateGroup.OnCreate.class, UpdateGroup.OnUpdate.class})

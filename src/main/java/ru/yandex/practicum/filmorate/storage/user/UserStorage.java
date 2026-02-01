@@ -10,7 +10,7 @@ public interface UserStorage {
 
     Collection<User> getAllUsers();
 
-    User getUserById(int id);
+    User getUserById(long id);
 
     User deleteAllUsers();
 
