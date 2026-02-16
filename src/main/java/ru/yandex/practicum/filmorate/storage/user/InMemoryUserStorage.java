@@ -32,13 +32,14 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public User deleteAllUsers() {
-        return null;
+    public Map<Long, User> deleteAllUsers() {
+        users.clear();
+        return users;
     }
 
     @Override
-    public User deleteUserById(int id) {
-        return null;
+    public User deleteUserById(long id) {
+        return users.remove(id);
     }
 
     @Override
@@ -55,7 +56,7 @@ public class InMemoryUserStorage implements UserStorage {
         throw new NotFoundException("User not found");
     }
 
-    public boolean isContainsUser(long id) {
+    public boolean isUserExists(long id) {
         return users.containsKey(id);
     }
 

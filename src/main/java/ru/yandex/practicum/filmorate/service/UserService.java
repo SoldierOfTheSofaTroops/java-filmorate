@@ -8,6 +8,7 @@ import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
 
 @Service
@@ -28,17 +29,17 @@ public class UserService implements UserStorage {
 
     @Override
     public User getUserById(long id) {
-        return null;
+        return userStorage.getUserById(id);
     }
 
     @Override
-    public User deleteAllUsers() {
-        return null;
+    public Map<Long, User> deleteAllUsers() {
+        return userStorage.deleteAllUsers();
     }
 
     @Override
-    public User deleteUserById(int id) {
-        return null;
+    public User deleteUserById(long id) {
+        return userStorage.deleteUserById(id);
     }
 
     @Override
@@ -46,18 +47,18 @@ public class UserService implements UserStorage {
         return userStorage.updateUser(user);
     }
 
-    public Set<Long> addToFriend(long id, long newFriendId){
-        if (newFriendId >= 0
-                && id >= 0
-                && userStorage.isContainsUser(newFriendId)
-                && userStorage.isContainsUser(id)) {
-            User friend = getUserById(id);
-            User newFriend = userStorage.getUserById(newFriendId);
-            newFriend.getFriends().add(friend.getId());
-            friend.getFriends().add(newFriend.getId());
-            userStorage.updateUser(friend);
-            userStorage.updateUser(newFriend);
-            return friend.getFriends();
+    public Set<Long> addToFriend(long whomId, long whoId){
+        if (whoId >= 0
+                && whomId >= 0
+                && userStorage.isUserExists(whoId)
+                && userStorage.isUserExists(whomId)) {
+            User whom = getUserById(whomId);
+            User who = getUserById(whoId);
+            who.getFriends().add(whom.getId());
+            whom.getFriends().add(who.getId());
+            userStorage.updateUser(whom);
+            userStorage.updateUser(who);
+            return whom.getFriends();
         }
         throw new NotFoundException("User not found");
     }

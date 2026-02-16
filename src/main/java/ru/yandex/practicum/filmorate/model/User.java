@@ -6,6 +6,7 @@ import ru.yandex.practicum.filmorate.validation.groups.CreateGroup;
 import ru.yandex.practicum.filmorate.validation.groups.UpdateGroup;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -17,6 +18,7 @@ public class User {
         this.email = email;
         this.login = login;
         this.birthday = birthday;
+        this.friends = new HashSet<>();
     }
 
     @Null (groups = CreateGroup.OnCreate.class)
@@ -35,6 +37,5 @@ public class User {
     @PastOrPresent (groups = {CreateGroup.OnCreate.class,  UpdateGroup.OnUpdate.class})
     private LocalDate birthday;
 
-    @Null (groups = CreateGroup.OnCreate.class)
     private Set<Long> friends;
 }
