@@ -1,16 +1,17 @@
 package ru.yandex.practicum.filmorate.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserStorage {
@@ -47,18 +48,57 @@ public class UserService implements UserStorage {
         return userStorage.updateUser(user);
     }
 
-    public Set<Long> addToFriend(long whomId, long whoId){
-        if (whoId >= 0
-                && whomId >= 0
-                && userStorage.isUserExists(whoId)
-                && userStorage.isUserExists(whomId)) {
-            User whom = getUserById(whomId);
-            User who = getUserById(whoId);
-            who.getFriends().add(whom.getId());
-            whom.getFriends().add(who.getId());
-            userStorage.updateUser(whom);
-            userStorage.updateUser(who);
-            return whom.getFriends();
+    public boolean addToFriend(long whomId, long whoId){
+        if (userStorage.isUserExists(whomId) &&  userStorage.isUserExists(whoId)) {
+            User whom = userStorage.getUserById(whomId);
+            User who = userStorage.getUserById(whoId);
+            if (whom.getFriends() == null) {
+                whom.setFriends(new HashSet<>());
+            }
+            if (who.getFriends() == null){
+                who.setFriends(new HashSet<>());
+            }
+            whom.getFriends().add(whoId);
+            who.getFriends().add(whomId);
+            updateUser(whom);
+            updateUser(who);
+            return true;
+        }
+        throw new NotFoundException("User not found");
+    }
+
+    public boolean removeFromFriend(long whomId, long whoId){
+        if (userStorage.isUserExists(whomId) &&  userStorage.isUserExists(whoId)) {
+            User whom = userStorage.getUserById(whomId);
+            User who = userStorage.getUserById(whoId);
+            if (whom.getFriends() == null) {
+                whom.setFriends(new HashSet<>());
+            }
+            if (who.getFriends() == null){
+                who.setFriends(new HashSet<>());
+            }
+            whom.getFriends().remove(whoId);
+            who.getFriends().remove(whomId);
+            updateUser(whom);
+            updateUser(who);
+            return true;
+        }
+        throw new NotFoundException("Something went wrong. One of the users may not have been found.");
+    }
+
+    public Collection<User> getUserFriends(long id) {
+        return userStorage.getFriends(id);
+    }
+
+    public Collection<User> getCommonFriends(long firstUserId, long secondUserId) {
+        if (userStorage.isUserExists(firstUserId) &&  userStorage.isUserExists(secondUserId)) {
+            Set<Long> firstUserFriends = userStorage.getUserById(firstUserId).getFriends();
+            Set<Long> secondUserFriends = userStorage.getUserById(secondUserId).getFriends();
+            Set<Long> commonFriendsId = new HashSet<>(firstUserFriends);
+            commonFriendsId.retainAll(secondUserFriends);
+            return commonFriendsId.stream()
+                    .map(userStorage::getUserById)
+                    .collect(Collectors.toCollection(ArrayList::new));
         }
         throw new NotFoundException("User not found");
     }

@@ -11,7 +11,6 @@ import ru.yandex.practicum.filmorate.validation.groups.CreateGroup;
 import ru.yandex.practicum.filmorate.validation.groups.UpdateGroup;
 
 import java.util.Collection;
-import java.util.Set;
 
 @Slf4j
 @RestController()
@@ -34,13 +33,28 @@ public class UserController {
         return userService.getAllUsers();
     }
 
+    @GetMapping("/{id}/friends")
+    public Collection<User> getFriends(@PathVariable String id) {
+        return userService.getUserFriends(Long.parseLong(id));
+    }
+
+    @GetMapping("/{id}/friends/common/{otherId}")
+    public Collection<User> getCommonFriends(@PathVariable String id, @PathVariable String otherId) {
+        return userService.getCommonFriends(Long.parseLong(id), Long.parseLong(otherId));
+    }
+
     @PutMapping
     public User updateUser(@Validated(UpdateGroup.OnUpdate.class) @RequestBody User user) {
         return userService.updateUser(user);
     }
 
     @PutMapping(value = "/{id}/friends/{friendId}")
-    public Set<Long> updateFriend(@PathVariable("id") long id, @PathVariable("friendId") long friendId) {
+    public boolean updateFriend(@PathVariable("id") long id, @PathVariable("friendId") long friendId) {
         return userService.addToFriend(id, friendId);
+    }
+
+    @DeleteMapping(value = "/{id}/friends/{friendId}")
+    public boolean deleteFriend(@PathVariable("id") long id, @PathVariable("friendId") long friendId) {
+        return userService.removeFromFriend(id, friendId);
     }
 }
