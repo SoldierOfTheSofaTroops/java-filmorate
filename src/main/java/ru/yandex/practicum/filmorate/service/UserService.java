@@ -48,23 +48,15 @@ public class UserService implements UserStorage {
         return userStorage.updateUser(user);
     }
 
-    public boolean addToFriend(long whomId, long whoId){
+    public void addToFriend(long whomId, long whoId){
         if (userStorage.isUserExists(whomId) &&  userStorage.isUserExists(whoId)) {
             User whom = userStorage.getUserById(whomId);
             User who = userStorage.getUserById(whoId);
-            if (whom.getFriends() == null) {
-                whom.setFriends(new HashSet<>());
-            }
-            if (who.getFriends() == null){
-                who.setFriends(new HashSet<>());
-            }
             whom.getFriends().add(whoId);
             who.getFriends().add(whomId);
             updateUser(whom);
             updateUser(who);
-            return true;
-        }
-        throw new NotFoundException("User not found");
+        } else throw new NotFoundException("User not found");
     }
 
     public boolean removeFromFriend(long whomId, long whoId){

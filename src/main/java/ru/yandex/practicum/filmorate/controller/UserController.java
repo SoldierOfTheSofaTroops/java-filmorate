@@ -5,12 +5,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.validation.groups.CreateGroup;
 import ru.yandex.practicum.filmorate.validation.groups.UpdateGroup;
 
 import java.util.Collection;
+import java.util.Map;
 
 @Slf4j
 @RestController()
@@ -45,16 +48,29 @@ public class UserController {
 
     @PutMapping
     public User updateUser(@Validated(UpdateGroup.OnUpdate.class) @RequestBody User user) {
-        return userService.updateUser(user);
+        User user1 = userService.updateUser(user);
+        if (user1 == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        };
+        return user1;
     }
 
     @PutMapping(value = "/{id}/friends/{friendId}")
-    public boolean updateFriend(@PathVariable("id") long id, @PathVariable("friendId") long friendId) {
-        return userService.addToFriend(id, friendId);
+    public void updateFriend(@PathVariable("id") long id, @PathVariable("friendId") long friendId) {
+        userService.addToFriend(id, friendId);
     }
 
     @DeleteMapping(value = "/{id}/friends/{friendId}")
     public boolean deleteFriend(@PathVariable("id") long id, @PathVariable("friendId") long friendId) {
         return userService.removeFromFriend(id, friendId);
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Map<String, String> handleUserNotFound(final NotFoundException exception) {
+        return Map.of(
+                "error", "User not found",
+                "errorMessage", exception.getMessage()
+        );
     }
 }

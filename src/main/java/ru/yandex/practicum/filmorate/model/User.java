@@ -14,13 +14,6 @@ import java.util.Set;
 @AllArgsConstructor
 public class User {
 
-    public User(String email, String login, LocalDate birthday) {
-        this.email = email;
-        this.login = login;
-        this.birthday = birthday;
-        this.friends = new HashSet<>();
-    }
-
     @Null (groups = CreateGroup.OnCreate.class)
     private Long id;
 
@@ -37,5 +30,5 @@ public class User {
     @PastOrPresent (groups = {CreateGroup.OnCreate.class,  UpdateGroup.OnUpdate.class})
     private LocalDate birthday;
 
-    private Set<Long> friends;
+    private Set<Long> friends = new HashSet<>();
 }

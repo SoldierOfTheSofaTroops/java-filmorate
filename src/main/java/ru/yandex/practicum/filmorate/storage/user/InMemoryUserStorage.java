@@ -53,8 +53,7 @@ public class InMemoryUserStorage implements UserStorage {
             oldUser.setBirthday(user.getBirthday());
             oldUser.setEmail(user.getEmail());
             return user;
-        }
-        throw new NotFoundException("User not found");
+        } else return null;
     }
 
     public boolean isUserExists(long id) {
