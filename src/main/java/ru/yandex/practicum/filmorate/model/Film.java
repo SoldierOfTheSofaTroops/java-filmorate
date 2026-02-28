@@ -9,6 +9,8 @@ import ru.yandex.practicum.filmorate.validation.groups.CreateGroup;
 import ru.yandex.practicum.filmorate.validation.groups.UpdateGroup;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -24,7 +26,7 @@ public class Film {
 
     @Null (groups = CreateGroup.OnCreate.class)
     @NotNull (groups = UpdateGroup.OnUpdate.class)
-    private Integer id;
+    private Long id;
 
     @NotBlank (groups = CreateGroup.OnCreate.class)
     private String name;
@@ -39,4 +41,8 @@ public class Film {
     @NotNull (groups = CreateGroup.OnCreate.class)
     @Positive (groups =  {CreateGroup.OnCreate.class, UpdateGroup.OnUpdate.class})
     private int duration;
+
+    private long likes;
+
+    private Set<User> usersLikes =  new HashSet<>();
 }

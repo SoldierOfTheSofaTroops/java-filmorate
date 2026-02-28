@@ -1,60 +1,75 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.exception.ConditionsNotMetException;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.validation.groups.CreateGroup;
 import ru.yandex.practicum.filmorate.validation.groups.UpdateGroup;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @RestController()
 @RequestMapping("/films")
 public class FilmController {
 
-    private final Map<Integer, Film> films = new HashMap<>();
+    @Autowired
+    private FilmService filmService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Film postFilm(@Validated(CreateGroup.OnCreate.class) @RequestBody Film film) {
-        film.setId(getNextId());
-        films.put(film.getId(), film);
-        log.info("Film {} created", film.getId());
-        return film;
+        return filmService.postFilm(film);
     }
 
     @GetMapping
     public Collection<Film> getFilms() {
-        return new ArrayList<>(films.values());
+        return filmService.getFilms();
+    }
+
+    @GetMapping("/popular")
+    public Collection<Film> getPopularFilms(@RequestParam (value = "count", required = false) Optional<Integer> count) {
+        return filmService.getPopular(count.orElse(10));
     }
 
     @PutMapping
     public Film updadeFilm(@Validated(UpdateGroup.OnUpdate.class) @RequestBody Film film) {
-        if (films.containsKey(film.getId())) {
-            Film oldFilm = films.get(film.getId());
-            oldFilm.setName(film.getName());
-            oldFilm.setDescription(film.getDescription());
-            oldFilm.setReleaseDate(film.getReleaseDate());
-            oldFilm.setDuration(film.getDuration());
-            films.put(oldFilm.getId(), oldFilm);
-            return oldFilm;
-        }
-        throw new NotFoundException("Film not found");
+       return filmService.updateFilm(film);
     }
 
-    private int getNextId() {
-        int currentMaxId = films.keySet()
-                .stream()
-                .mapToInt(id -> id)
-                .max()
-                .orElse(0);
-        return ++currentMaxId;
+    @PutMapping("/{id}/like/{userId}")
+    public Film setLike(@PathVariable Long id, @PathVariable Long userId) {
+        return filmService.addLike(id, userId);
+    }
+
+    @DeleteMapping("/{id}/like/{userId}")
+    public Film deleteLike(@PathVariable Long id, @PathVariable Long userId) {
+        return filmService.removeLike(id, userId);
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Map<String, String> handleFilmNotFound(final NotFoundException exception) {
+        return Map.of(
+                "error", "Film not found",
+                "errorMessage", exception.getMessage()
+        );
+    }
+
+    @ExceptionHandler(ConditionsNotMetException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> handleIncorrectCountValue(final ConditionsNotMetException exception) {
+        return Map.of(
+                "error", "Incorrect value",
+                "errorMessage", exception.getMessage()
+        );
     }
 }

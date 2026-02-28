@@ -14,36 +14,18 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserService implements UserStorage {
+public class UserService {
 
     private final InMemoryUserStorage userStorage;
 
-    @Override
     public User createUser(User user) {
         return userStorage.createUser(user);
     }
 
-    @Override
     public Collection<User> getAllUsers() {
         return userStorage.getAllUsers();
     }
 
-    @Override
-    public User getUserById(long id) {
-        return userStorage.getUserById(id);
-    }
-
-    @Override
-    public Map<Long, User> deleteAllUsers() {
-        return userStorage.deleteAllUsers();
-    }
-
-    @Override
-    public User deleteUserById(long id) {
-        return userStorage.deleteUserById(id);
-    }
-
-    @Override
     public User updateUser(User user) {
         return userStorage.updateUser(user);
     }

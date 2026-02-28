@@ -32,13 +32,11 @@ public class InMemoryUserStorage implements UserStorage {
         return users.get(id);
     }
 
-    @Override
     public Map<Long, User> deleteAllUsers() {
         users.clear();
         return users;
     }
 
-    @Override
     public User deleteUserById(long id) {
         return users.remove(id);
     }
