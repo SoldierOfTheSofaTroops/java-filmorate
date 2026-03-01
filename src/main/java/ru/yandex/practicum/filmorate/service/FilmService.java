@@ -66,9 +66,9 @@ public class FilmService {
         if (count > 0){
             Collection<Film> films = filmStorage.getFilms();
             return films.stream()
-                    .sorted(Comparator.comparingLong(Film::getLikes))
+                    .sorted(Comparator.comparingLong(Film::getLikes).reversed())
                     .limit(count)
-                    .collect(Collectors.toSet());
+                    .collect(Collectors.toList());
         }
         throw new ConditionsNotMetException("Incorrect count value");
     }

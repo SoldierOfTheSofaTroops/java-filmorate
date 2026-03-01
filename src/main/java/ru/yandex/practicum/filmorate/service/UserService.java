@@ -6,10 +6,10 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
-import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -32,12 +32,12 @@ public class UserService {
 
     public void addToFriend(long whomId, long whoId){
         if (userStorage.isUserExists(whomId) &&  userStorage.isUserExists(whoId)) {
-            User whom = userStorage.getUserById(whomId);
-            User who = userStorage.getUserById(whoId);
-            whom.getFriends().add(whoId);
-            who.getFriends().add(whomId);
-            updateUser(whom);
-            updateUser(who);
+            User user1 = userStorage.getUserById(whomId);
+            User user2 = userStorage.getUserById(whoId);
+            user1.getFriends().add(whoId);
+            user2.getFriends().add(whomId);
+            updateUser(user1);
+            updateUser(user2);
         } else throw new NotFoundException("User not found");
     }
 
@@ -51,8 +51,8 @@ public class UserService {
             if (who.getFriends() == null){
                 who.setFriends(new HashSet<>());
             }
-            whom.getFriends().remove(whoId);
-            who.getFriends().remove(whomId);
+            whom.getFriends().remove(who.getId());
+            who.getFriends().remove(whom.getId());
             updateUser(whom);
             updateUser(who);
             return true;
@@ -68,11 +68,11 @@ public class UserService {
         if (userStorage.isUserExists(firstUserId) &&  userStorage.isUserExists(secondUserId)) {
             Set<Long> firstUserFriends = userStorage.getUserById(firstUserId).getFriends();
             Set<Long> secondUserFriends = userStorage.getUserById(secondUserId).getFriends();
-            Set<Long> commonFriendsId = new HashSet<>(firstUserFriends);
-            commonFriendsId.retainAll(secondUserFriends);
-            return commonFriendsId.stream()
-                    .map(userStorage::getUserById)
-                    .collect(Collectors.toCollection(ArrayList::new));
+            firstUserFriends.retainAll(secondUserFriends);
+            return userStorage
+                    .getAllUsers()
+                    .stream()
+                    .filter(user -> firstUserFriends.contains(user.getId())).toList();
         }
         throw new NotFoundException("User not found");
     }

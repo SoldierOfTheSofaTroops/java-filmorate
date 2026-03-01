@@ -6,12 +6,9 @@ import ru.yandex.practicum.filmorate.validation.groups.CreateGroup;
 import ru.yandex.practicum.filmorate.validation.groups.UpdateGroup;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class User {
 
     @Null (groups = CreateGroup.OnCreate.class)

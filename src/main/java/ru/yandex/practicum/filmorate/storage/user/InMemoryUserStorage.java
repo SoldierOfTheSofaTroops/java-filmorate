@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 @Component
 public class InMemoryUserStorage implements UserStorage {
 
-    private Map<Long, User> users = new HashMap<>();
+    private final Map<Long, User> users = new HashMap<>();
 
     @Override
     public User createUser(User user) {
@@ -32,26 +32,19 @@ public class InMemoryUserStorage implements UserStorage {
         return users.get(id);
     }
 
-    public Map<Long, User> deleteAllUsers() {
-        users.clear();
-        return users;
-    }
-
-    public User deleteUserById(long id) {
-        return users.remove(id);
-    }
-
     @Override
     public User updateUser(User user) {
         if (users.containsKey(user.getId())) {
-            User oldUser = users.get(user.getId());
+            User oldUser = new User();
             oldUser.setId(user.getId());
             oldUser.setName(user.getName());
             oldUser.setLogin(user.getLogin());
             oldUser.setBirthday(user.getBirthday());
             oldUser.setEmail(user.getEmail());
-            return user;
-        } else return null;
+            oldUser.setFriends(user.getFriends());
+            users.put(oldUser.getId(), oldUser);
+            return oldUser;
+        } else throw new NotFoundException("User not found");
     }
 
     public boolean isUserExists(long id) {
@@ -60,10 +53,11 @@ public class InMemoryUserStorage implements UserStorage {
 
     public Collection<User> getFriends(long id) {
         if (users.containsKey(id)) {
-            Set<Long> friends = users.get(id).getFriends();
-            return friends.stream()
-                    .map(f -> users.get(f))
-                    .collect(Collectors.toList());
+           Set<Long> friends = users.get(id).getFriends();
+           return users.values()
+                   .stream()
+                   .filter(user -> friends.contains(user.getId()))
+                   .collect(Collectors.toList());
         }
         throw new NotFoundException("User not found");
     }

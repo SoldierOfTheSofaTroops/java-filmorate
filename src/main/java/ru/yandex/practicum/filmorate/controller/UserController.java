@@ -27,8 +27,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     public User createUser(@Validated(CreateGroup.OnCreate.class)
                            @RequestBody User user) {
-        userService.createUser(user);
-        return user;
+        return userService.createUser(user);
     }
 
     @GetMapping
@@ -51,12 +50,12 @@ public class UserController {
         User user1 = userService.updateUser(user);
         if (user1 == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
-        };
+        }
         return user1;
     }
 
     @PutMapping(value = "/{id}/friends/{friendId}")
-    public void updateFriend(@PathVariable("id") long id, @PathVariable("friendId") long friendId) {
+    public void addToFriend(@PathVariable("id") long id, @PathVariable("friendId") long friendId) {
         userService.addToFriend(id, friendId);
     }
 
