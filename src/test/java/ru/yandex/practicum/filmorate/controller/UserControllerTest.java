@@ -18,8 +18,7 @@ import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
 import java.time.LocalDate;
 import java.util.HashSet;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -137,5 +136,47 @@ public class UserControllerTest {
         assertEquals(inMemoryUserStorage.getUserById(1), user);
         assertEquals(user1.getEmail(), user.getEmail());
         assertEquals(user1.getLogin(), user.getLogin());
+    }
+
+    @Test
+    public void shouldAddToFriends() {
+        User user1 = new User();
+        User user2 = new User();
+        user1.setLogin("user1");
+        user2.setLogin("user2");
+        user1.setBirthday(LocalDate.parse("1987-09-01"));
+        user2.setBirthday(LocalDate.parse("1987-09-01"));
+        user1.setEmail("user1@mail.com");
+        user2.setEmail("user2@mail.com");
+
+        testRestTemplate.postForEntity("http://localhost:" + port + "/users", user1, User.class);
+        testRestTemplate.postForEntity("http://localhost:" + port + "/users", user2, User.class);
+        testRestTemplate.put("http://localhost:" + port + "/users/1/friends/2", null);
+        assertTrue(inMemoryUserStorage.getUserById(1L).getFriends().contains(2L));
+        assertTrue(inMemoryUserStorage.getUserById(2L).getFriends().contains(1L));
+    }
+
+    @Test
+    public void shouldDeleteFromFriend() {
+        User user1 = new User();
+        User user2 = new User();
+        user1.setLogin("user1");
+        user2.setLogin("user2");
+        user1.setBirthday(LocalDate.parse("1987-09-01"));
+        user2.setBirthday(LocalDate.parse("1987-09-01"));
+        user1.setEmail("user1@mail.com");
+        user2.setEmail("user2@mail.com");
+
+        testRestTemplate.postForEntity("http://localhost:" + port + "/users", user1, User.class);
+        testRestTemplate.postForEntity("http://localhost:" + port + "/users", user2, User.class);
+        testRestTemplate.put("http://localhost:" + port + "/users/1/friends/2", null);
+
+        assertTrue(inMemoryUserStorage.getUserById(1L).getFriends().contains(2L));
+        assertTrue(inMemoryUserStorage.getUserById(2L).getFriends().contains(1L));
+
+        testRestTemplate.delete("http://localhost:" + port + "/users/1/friends/2", User.class);
+
+        assertFalse(inMemoryUserStorage.getUserById(1L).getFriends().contains(1L));
+        assertFalse(inMemoryUserStorage.getUserById(2L).getFriends().contains(1L));
     }
 }
