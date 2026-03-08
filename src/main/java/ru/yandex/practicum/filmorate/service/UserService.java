@@ -30,7 +30,7 @@ public class UserService {
         return userStorage.updateUser(user);
     }
 
-    public void addToFriend(long whomId, long whoId){
+    public void addToFriend(long whomId, long whoId) {
         if (userStorage.isUserExists(whomId) &&  userStorage.isUserExists(whoId)) {
             User user1 = userStorage.getUserById(whomId);
             User user2 = userStorage.getUserById(whoId);
@@ -48,7 +48,7 @@ public class UserService {
             if (whom.getFriends() == null) {
                 whom.setFriends(new HashSet<>());
             }
-            if (who.getFriends() == null){
+            if (who.getFriends() == null) {
                 who.setFriends(new HashSet<>());
             }
             whom.getFriends().remove(who.getId());
