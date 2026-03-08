@@ -61,7 +61,9 @@ public class UserControllerTest {
         user.setLogin("user login");
         user.setName("User");
         user.setBirthday(LocalDate.parse("1987-09-01"));
+
         ResponseEntity<User> notValidResponseEntity = testRestTemplate.postForEntity("http://localhost:" + port + "/users", user, User.class);
+
         assertEquals(HttpStatus.BAD_REQUEST, notValidResponseEntity.getStatusCode());
     }
 
@@ -82,8 +84,10 @@ public class UserControllerTest {
         user.setLogin("user_login");
         user.setEmail("dkcreator@gmail.com");
         user.setBirthday(LocalDate.parse("1987-09-01"));
+
         ResponseEntity<User> validResponseEntity = testRestTemplate
                 .postForEntity("http://localhost:" + port + "/users", user, User.class);
+
         Assert.assertNotNull(validResponseEntity.getBody());
         assertEquals("user_login",validResponseEntity.getBody().getName());
         assertEquals(HttpStatus.CREATED, validResponseEntity.getStatusCode());
