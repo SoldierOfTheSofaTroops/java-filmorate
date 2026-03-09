@@ -50,7 +50,7 @@ public class FilmService {
     }
 
     public Film removeLike(long id, long userId) {
-        if (userStorage.isUserExists(userId) && filmStorage.isFilmExists(id)){
+        if (userStorage.isUserExists(userId) && filmStorage.isFilmExists(id)) {
             Film film = filmStorage.getFilmById(id);
             User user = userStorage.getUserById(userId);
             if (film.getUsersLikes().contains(user)){
@@ -63,7 +63,7 @@ public class FilmService {
     }
 
     public Collection<Film> getPopular(int count) {
-        if (count > 0){
+        if (count > 0) {
             Collection<Film> films = filmStorage.getFilms();
             return films.stream()
                     .sorted(Comparator.comparingLong(Film::getLikes).reversed())
