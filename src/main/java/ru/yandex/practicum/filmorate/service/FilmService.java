@@ -36,7 +36,7 @@ public class FilmService {
 
     public Film updateFilm(Film film) {
         return filmStorage.updateFilm(film);
-        }
+    }
 
     public Film addLike(long id, long userId) {
         if (userStorage.isUserExists(userId) && filmStorage.isFilmExists(id)) {
@@ -53,7 +53,7 @@ public class FilmService {
         if (userStorage.isUserExists(userId) && filmStorage.isFilmExists(id)) {
             Film film = filmStorage.getFilmById(id);
             User user = userStorage.getUserById(userId);
-            if (film.getUsersLikes().contains(user)){
+            if (film.getUsersLikes().contains(user)) {
                 film.setLikes(film.getLikes() - 1);
                 film.getUsersLikes().remove(user);
                 filmStorage.updateFilm(film);
