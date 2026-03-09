@@ -39,7 +39,7 @@ public class UserService {
         } else throw new NotFoundException("User not found");
     }
 
-    public boolean removeFromFriend(long whomId, long whoId){
+    public boolean removeFromFriend(long whomId, long whoId) {
         if (userStorage.isUserExists(whomId) &&  userStorage.isUserExists(whoId)) {
             User whom = userStorage.getUserById(whomId);
             User who = userStorage.getUserById(whoId);
