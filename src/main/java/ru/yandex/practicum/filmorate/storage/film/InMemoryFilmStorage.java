@@ -35,7 +35,7 @@ public class InMemoryFilmStorage implements  FilmStorage {
             oldFilm.setDuration(film.getDuration());
             films.put(oldFilm.getId(), oldFilm);
             return oldFilm;
-        }else throw new NotFoundException("Film not found");
+        } else throw new NotFoundException("Film not found");
     }
 
     public boolean isFilmExists(long id) {
