@@ -47,11 +47,11 @@ public class UserController {
 
     @PutMapping
     public User updateUser(@Validated(UpdateGroup.OnUpdate.class) @RequestBody User user) {
-        User user1 = userService.updateUser(user);
-        if (user1 == null) {
+        User updatedUser = userService.updateUser(user);
+        if (updatedUser == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }
-        return user1;
+        return updatedUser;
     }
 
     @PutMapping(value = "/{id}/friends/{friendId}")
@@ -62,14 +62,5 @@ public class UserController {
     @DeleteMapping(value = "/{id}/friends/{friendId}")
     public boolean deleteFriend(@PathVariable("id") long id, @PathVariable("friendId") long friendId) {
         return userService.removeFromFriend(id, friendId);
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Map<String, String> handleUserNotFound(final NotFoundException exception) {
-        return Map.of(
-                "error", "User not found",
-                "errorMessage", exception.getMessage()
-        );
     }
 }

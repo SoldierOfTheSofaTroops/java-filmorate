@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.util.*;
 
@@ -14,7 +14,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final InMemoryUserStorage userStorage;
+    private final UserStorage userStorage;
 
     public User createUser(User user) {
         return userStorage.createUser(user);
@@ -30,12 +30,10 @@ public class UserService {
 
     public void addToFriend(long whomId, long whoId) {
         if (userStorage.isUserExists(whomId) &&  userStorage.isUserExists(whoId)) {
-            User user1 = userStorage.getUserById(whomId);
-            User user2 = userStorage.getUserById(whoId);
-            user1.getFriends().add(whoId);
-            user2.getFriends().add(whomId);
-            updateUser(user1);
-            updateUser(user2);
+            User whom = userStorage.getUserById(whomId);
+            User who = userStorage.getUserById(whoId);
+            whom.getFriends().add(whoId);
+            who.getFriends().add(whomId);
         } else throw new NotFoundException("User not found");
     }
 
@@ -51,8 +49,6 @@ public class UserService {
             }
             whom.getFriends().remove(who.getId());
             who.getFriends().remove(whom.getId());
-            updateUser(whom);
-            updateUser(who);
             return true;
         }
         throw new NotFoundException("Something went wrong. One of the users may not have been found.");

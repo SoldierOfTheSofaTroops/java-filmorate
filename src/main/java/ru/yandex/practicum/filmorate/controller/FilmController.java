@@ -1,28 +1,24 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.ConditionsNotMetException;
-import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.validation.groups.CreateGroup;
 import ru.yandex.practicum.filmorate.validation.groups.UpdateGroup;
 
 import java.util.Collection;
-import java.util.Map;
-import java.util.Optional;
 
 @Slf4j
+@RequiredArgsConstructor
 @RestController()
 @RequestMapping("/films")
 public class FilmController {
 
-    @Autowired
-    private FilmService filmService;
+    private final FilmService filmService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -37,8 +33,8 @@ public class FilmController {
 
     @GetMapping("/popular")
     public Collection<Film> getPopularFilms(
-            @RequestParam (value = "count", required = false) Optional<Integer> count) {
-        return filmService.getPopular(count.orElse(10));
+            @RequestParam (value = "count", required = false, defaultValue = "10") Integer count) {
+        return filmService.getPopular(count);
     }
 
     @PutMapping
@@ -54,23 +50,5 @@ public class FilmController {
     @DeleteMapping("/{id}/like/{userId}")
     public Film deleteLike(@PathVariable Long id, @PathVariable Long userId) {
         return filmService.removeLike(id, userId);
-    }
-
-    @ExceptionHandler(NotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Map<String, String> handleFilmNotFound(final NotFoundException exception) {
-        return Map.of(
-                "error", "Film not found",
-                "errorMessage", exception.getMessage()
-        );
-    }
-
-    @ExceptionHandler(ConditionsNotMetException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, String> handleIncorrectCountValue(final ConditionsNotMetException exception) {
-        return Map.of(
-                "error", "Incorrect value",
-                "errorMessage", exception.getMessage()
-        );
     }
 }

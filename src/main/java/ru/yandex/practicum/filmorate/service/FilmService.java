@@ -1,30 +1,24 @@
 package ru.yandex.practicum.filmorate.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.ConditionsNotMetException;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
-import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class FilmService {
 
-    @Autowired
-    private FilmStorage filmStorage;
-
-    @Autowired
-    private InMemoryUserStorage userStorage;
-
-    public FilmService(InMemoryUserStorage userStorage) {
-        this.userStorage = userStorage;
-    }
+    private final FilmStorage filmStorage;
+    private final UserStorage userStorage;
 
     public Film postFilm(Film film) {
         return filmStorage.postFilm(film);
@@ -44,7 +38,6 @@ public class FilmService {
             User user = userStorage.getUserById(userId);
             film.setLikes(film.getLikes() + 1);
             film.getUsersLikes().add(user);
-            filmStorage.updateFilm(film);
             return film;
         } else throw new NotFoundException("Film or user not found");
     }
@@ -56,13 +49,12 @@ public class FilmService {
             if (film.getUsersLikes().contains(user)) {
                 film.setLikes(film.getLikes() - 1);
                 film.getUsersLikes().remove(user);
-                filmStorage.updateFilm(film);
             } else throw new NotFoundException("Users like not found");
             return film;
         } else throw new NotFoundException("Film or user not found");
     }
 
-    public Collection<Film> getPopular(int count) {
+    public Collection<Film> getPopular(Integer count) {
         if (count > 0) {
             Collection<Film> films = filmStorage.getFilms();
             return films.stream()
