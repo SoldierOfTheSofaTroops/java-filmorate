@@ -6,27 +6,13 @@ import ru.yandex.practicum.filmorate.validation.groups.CreateGroup;
 import ru.yandex.practicum.filmorate.validation.groups.UpdateGroup;
 
 import java.time.LocalDate;
+import java.util.*;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class User {
 
-    public User(String email, String login, String name, LocalDate birthday) {
-        this.email = email;
-        this.login = login;
-        this.name = name;
-        this.birthday = birthday;
-    }
-
-    public User(String email, String login, LocalDate birthday) {
-        this.email = email;
-        this.login = login;
-        this.birthday = birthday;
-    }
-
     @Null (groups = CreateGroup.OnCreate.class)
-    private Integer id;
+    private Long id;
 
     @NotBlank (groups = CreateGroup.OnCreate.class)
     @Email(message = "Incorrect email address", groups = {CreateGroup.OnCreate.class, UpdateGroup.OnUpdate.class})
@@ -40,4 +26,6 @@ public class User {
 
     @PastOrPresent (groups = {CreateGroup.OnCreate.class,  UpdateGroup.OnUpdate.class})
     private LocalDate birthday;
+
+    private Set<Long> friends = new HashSet<>();
 }

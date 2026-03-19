@@ -27,48 +27,64 @@ public class FilmControllerTest {
 
     @Test
     public void shouldReturnNotValidReleaseDate() {
-        Film notValidfilm = new Film(0, "Some film", "Very intresting film", LocalDate.parse("1895-12-28"), 120);
+        Film notValidfilm = new Film();
+        notValidfilm.setId(0L);
+        notValidfilm.setName("Some film");
+        notValidfilm.setDescription("Very intresting film");
+        notValidfilm.setReleaseDate(LocalDate.parse("1895-12-28"));
+        notValidfilm.setDuration(120);
         ResponseEntity<Film> notValidResponseEntity = testRestTemplate.postForEntity("http://localhost:" + port + "/films", notValidfilm, Film.class);
         assertEquals(HttpStatus.BAD_REQUEST, notValidResponseEntity.getStatusCode());
     }
 
     @Test
     public void shouldReturnNotValidFilmName() {
-        Film notValidfilm = new Film(0, "", "Very intresting film", LocalDate.parse("1895-12-29"), 120);
+        Film notValidfilm = new Film();
+        notValidfilm.setId(0L);
+        notValidfilm.setName("");
+        notValidfilm.setDescription("Very intresting film");
+        notValidfilm.setReleaseDate(LocalDate.parse("1895-12-28"));
+        notValidfilm.setDuration(120);
         ResponseEntity<Film> notValidResponseEntity = testRestTemplate.postForEntity("http://localhost:" + port + "/films", notValidfilm, Film.class);
         assertEquals(HttpStatus.BAD_REQUEST, notValidResponseEntity.getStatusCode());
     }
 
     @Test
     public void shouldReturnNotValidDuration() {
-        Film notValidfilm = new Film(0, "Some film", "Very intresting film", LocalDate.parse("1895-12-29"), -1);
+        Film notValidfilm = new Film();
+        notValidfilm.setId(0L);
+        notValidfilm.setName("Some film");
+        notValidfilm.setDescription("Very intresting film");
+        notValidfilm.setReleaseDate(LocalDate.parse("1895-12-28"));
+        notValidfilm.setDuration(-1);
         ResponseEntity<Film> notValidResponseEntity = testRestTemplate.postForEntity("http://localhost:" + port + "/films", notValidfilm, Film.class);
         assertEquals(HttpStatus.BAD_REQUEST, notValidResponseEntity.getStatusCode());
     }
 
     @Test
     public void shouldReturnNotValidDescriptionLength() {
-        Film notValidfilm = new Film(0,
-                "Some film",
-                "Veryintrestingfilmwkjbcweihbvciwhebvwhie" +
-                        "bvwiebcvkjsdhbciwehbvchkjbvhrebviwbewkjbfe" +
-                        "kwhvbrbvkhjwbvwhevbwkjvwhjbevwhievbwhjebjh" +
-                        "cbwiebkjhcbwjkehbcwiekkjbcwiebchwjebcwihbew" +
-                        "jhbckjwehcbwibvcjhgdcjhbdkhjvbkjabvhjsbvfhj" +
-                        "sbvhjgsebakvbjksgv",
-                LocalDate.parse("1895-12-29"),
-                120);
+        Film notValidfilm = new Film();
+        notValidfilm.setId(0L);
+        notValidfilm.setName("Some film");
+        notValidfilm.setDescription("Veryintrestingfilmwkjbcweihbvciwhebvwhie" +
+                "bvwiebcvkjsdhbciwehbvchkjbvhrebviwbewkjbfe" +
+                "kwhvbrbvkhjwbvwhevbwkjvwhjbevwhievbwhjebjh" +
+                "cbwiebkjhcbwjkehbcwiekkjbcwiebchwjebcwihbew" +
+                "jhbckjwehcbwibvcjhgdcjhbdkhjvbkjabvhjsbvfhj" +
+                "sbvhjgsebakvbjksgv");
+        notValidfilm.setReleaseDate(LocalDate.parse("1895-12-28"));
+        notValidfilm.setDuration(120);
         ResponseEntity<Film> notValidResponseEntity = testRestTemplate.postForEntity("http://localhost:" + port + "/films", notValidfilm, Film.class);
         assertEquals(HttpStatus.BAD_REQUEST, notValidResponseEntity.getStatusCode());
     }
 
     @Test
     public void shouldReturnFilmCreated() {
-        Film validFilm = new Film(
-                "Some film",
-                "Very intresting film",
-                LocalDate.parse("1895-12-29"),
-                120);
+        Film validFilm = new Film();
+        validFilm.setName("Some film");
+        validFilm.setDescription("Very intresting film");
+        validFilm.setReleaseDate(LocalDate.parse("1900-12-28"));
+        validFilm.setDuration(120);
         ResponseEntity<Film> validFilmResp = testRestTemplate.postForEntity("http://localhost:" + port + "/films", validFilm, Film.class);
         assertEquals(HttpStatus.CREATED, validFilmResp.getStatusCode());
     }
