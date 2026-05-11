@@ -27,7 +27,5 @@ public class User {
     @PastOrPresent (groups = {CreateGroup.OnCreate.class,  UpdateGroup.OnUpdate.class})
     private LocalDate birthday;
 
-    private
-
     private Set<Long> friends = new HashSet<>();
 }
