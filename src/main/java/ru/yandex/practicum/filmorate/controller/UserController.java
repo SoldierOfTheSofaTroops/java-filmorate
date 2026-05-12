@@ -33,6 +33,11 @@ public class UserController {
         return userService.getAllUsers();
     }
 
+    @GetMapping("/{id}")
+    public User getUserById(@PathVariable @RequestParam long id) {
+        return userService.getUserById(id);
+    }
+
     @GetMapping("/{id}/friends")
     public Collection<User> getFriends(@PathVariable String id) {
         return userService.getUserFriends(Long.parseLong(id));
