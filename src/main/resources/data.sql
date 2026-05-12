@@ -1,12 +1,14 @@
 -- Очистка таблиц перед вставкой данных
-TRUNCATE TABLE filmorate.users_films_likes RESTART IDENTITY CASCADE;
-TRUNCATE TABLE filmorate.film_mpa_rating RESTART IDENTITY CASCADE;
-TRUNCATE TABLE filmorate.film_genre RESTART IDENTITY CASCADE;
-TRUNCATE TABLE filmorate.friendships RESTART IDENTITY CASCADE;
-TRUNCATE TABLE filmorate.films RESTART IDENTITY CASCADE;
-TRUNCATE TABLE filmorate.mpa_rating RESTART IDENTITY CASCADE;
-TRUNCATE TABLE filmorate.genre RESTART IDENTITY CASCADE;
-TRUNCATE TABLE filmorate.users RESTART IDENTITY CASCADE;
+SET REFERENTIAL_INTEGRITY FALSE;
+TRUNCATE TABLE filmorate.users_films_likes RESTART IDENTITY;
+TRUNCATE TABLE filmorate.film_mpa_rating RESTART IDENTITY;
+TRUNCATE TABLE filmorate.film_genre RESTART IDENTITY;
+TRUNCATE TABLE filmorate.friendships RESTART IDENTITY;
+TRUNCATE TABLE filmorate.films RESTART IDENTITY;
+TRUNCATE TABLE filmorate.mpa_rating RESTART IDENTITY;
+TRUNCATE TABLE filmorate.genre RESTART IDENTITY;
+TRUNCATE TABLE filmorate.users RESTART IDENTITY;
+SET REFERENTIAL_INTEGRITY TRUE;
 
 -- 1. Пользователи
 INSERT INTO filmorate.users (email, login, user_name, birthday) VALUES
@@ -66,6 +68,7 @@ INSERT INTO filmorate.users_films_likes (film_id, user_id) VALUES
 -- 8. Дружба между пользователями (friendships)
 -- Пользователь 1 отправил заявку пользователю 2 (подтверждено)
 -- Пользователь 2 отправил заявку пользователю 3 (не подтверждено)
-INSERT INTO filmorate.friendships (user_id, friend_id, status, request_date, accepted_date) VALUES
-   (1, 2, 'CONFIRMED', CURRENT_DATE - INTERVAL '5 days', CURRENT_DATE - INTERVAL '4 days'),
-   (2, 3, 'NOT_CONFIRMED', CURRENT_DATE - INTERVAL '2 days', NULL);
+INSERT INTO filmorate.friendships (user_id, friend_id, status, request_date, accepted_date)
+VALUES
+    (1, 2, 'CONFIRMED', CURRENT_DATE - 5, CURRENT_DATE - 4),
+    (2, 3, 'NOT_CONFIRMED', CURRENT_DATE - 2, NULL);
