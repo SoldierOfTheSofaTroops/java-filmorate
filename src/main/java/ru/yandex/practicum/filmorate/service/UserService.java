@@ -16,7 +16,6 @@ import java.util.*;
 @RequiredArgsConstructor
 public class UserService {
 
-    @Qualifier("userDbStorage")
     private final UserStorage userStorage;
 
     public User createUser(User user) {

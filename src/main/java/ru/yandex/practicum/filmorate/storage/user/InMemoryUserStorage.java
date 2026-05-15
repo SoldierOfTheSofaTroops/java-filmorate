@@ -9,7 +9,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
-@Qualifier("inMemoryDbStorage")
 public class InMemoryUserStorage implements UserStorage {
 
     private final Map<Long, User> users = new HashMap<>();

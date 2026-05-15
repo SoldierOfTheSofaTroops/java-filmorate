@@ -1,6 +1,8 @@
 package ru.yandex.practicum.filmorate.storage.user;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.dal.UserRowMapper;
@@ -10,9 +12,10 @@ import java.util.Collection;
 import java.util.List;
 
 @Component
-@Qualifier("userDbStorage")
+@Primary
 public class UserDbStorage implements UserStorage{
 
+    @Autowired
     JdbcTemplate jdbcTemplate;
 
     @Override
@@ -27,7 +30,7 @@ public class UserDbStorage implements UserStorage{
 
     @Override
     public User getUserById(long id) {
-        String sql = "SELECT * FROM users WHERE id = ?";
+        String sql = "SELECT * FROM filmorate.users WHERE id = ?";
         return jdbcTemplate.queryForObject(sql, new UserRowMapper(), id);
     }
 
