@@ -18,7 +18,7 @@ public class UserService {
 
     private final UserStorage userStorage;
 
-    public User createUser(User user) {
+    public int createUser(User user) {
         return userStorage.createUser(user);
     }
 

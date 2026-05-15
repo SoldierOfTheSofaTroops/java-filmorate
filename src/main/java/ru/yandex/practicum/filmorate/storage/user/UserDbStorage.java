@@ -19,8 +19,13 @@ public class UserDbStorage implements UserStorage{
     JdbcTemplate jdbcTemplate;
 
     @Override
-    public User createUser(User user) {
-        return null;
+    public int createUser(User user) {
+        return jdbcTemplate
+                .update("INSERT INTO filmorate.users VALUES(?, ?, ?, ?)",
+                        user.getEmail(),
+                        user.getLogin(),
+                        user.getName(),
+                        user.getBirthday());
     }
 
     @Override
@@ -36,6 +41,7 @@ public class UserDbStorage implements UserStorage{
 
     @Override
     public User updateUser(User user) {
+
         return null;
     }
 
