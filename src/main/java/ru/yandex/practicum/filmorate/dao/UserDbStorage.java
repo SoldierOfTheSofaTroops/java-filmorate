@@ -1,36 +1,38 @@
-package ru.yandex.practicum.filmorate.storage.user;
+package ru.yandex.practicum.filmorate.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.dal.UserRowMapper;
+import ru.yandex.practicum.filmorate.dao.mappers.UserRowMapper;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.util.Collection;
 import java.util.List;
 
 @Component
 @Primary
-public class UserDbStorage implements UserStorage{
+public class UserDbStorage implements UserStorage {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
 
     @Override
-    public int createUser(User user) {
-        return jdbcTemplate
-                .update("INSERT INTO filmorate.users VALUES(?, ?, ?, ?)",
+    public User createUser(User user) {
+        jdbcTemplate
+                .update("INSERT INTO filmorate.users(email, login, user_name, birthday) VALUES(?, ?, ?, ?)",
                         user.getEmail(),
                         user.getLogin(),
                         user.getName(),
                         user.getBirthday());
+        return user;
     }
 
     @Override
     public Collection<User> getAllUsers() {
-        return List.of();
+        String sql = "SELECT * FROM filmorate.users";
+        return jdbcTemplate.query(sql, new UserRowMapper());
     }
 
     @Override
@@ -41,13 +43,22 @@ public class UserDbStorage implements UserStorage{
 
     @Override
     public User updateUser(User user) {
+        String sql = "UPDATE FILMORATE.USERS SET email=?, login = ?, user_name=?, birthday = ? WHERE id = ?";
 
-        return null;
+            jdbcTemplate.update(sql,
+                    user.getEmail(),
+                    user.getLogin(),
+                    user.getName(),
+                    user.getBirthday(),
+                    user.getId());
+
+            return user;
     }
 
     @Override
     public boolean isUserExists(long userId) {
-        return false;
+        String sql = "SELECT id FROM filmorate.users WHERE id = ?";
+        return jdbcTemplate.query(sql, new UserRowMapper(), userId).isEmpty();
     }
 
     @Override

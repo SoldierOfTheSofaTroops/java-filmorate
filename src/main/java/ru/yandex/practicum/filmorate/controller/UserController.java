@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.validation.groups.CreateGroup;
@@ -23,7 +22,7 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public int createUser(@Validated(CreateGroup.OnCreate.class)
+    public User createUser(@Validated(CreateGroup.OnCreate.class)
                            @RequestBody User user) {
         return userService.createUser(user);
     }
@@ -50,11 +49,7 @@ public class UserController {
 
     @PutMapping
     public User updateUser(@Validated(UpdateGroup.OnUpdate.class) @RequestBody User user) {
-        User updatedUser = userService.updateUser(user);
-        if (updatedUser == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
-        }
-        return updatedUser;
+        return userService.updateUser(user);
     }
 
     @PutMapping(value = "/{id}/friends/{friendId}")
