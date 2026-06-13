@@ -3,75 +3,64 @@ package ru.yandex.practicum.filmorate.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exception.NotFoundException;
+import org.springframework.validation.annotation.Validated;
+import ru.yandex.practicum.filmorate.dal.UserRepository;
+import ru.yandex.practicum.filmorate.dal.dto.UserDTO;
+import ru.yandex.practicum.filmorate.dal.dto.request.CreateUserRequest;
+import ru.yandex.practicum.filmorate.dal.dto.request.UpdateUserRequest;
+import ru.yandex.practicum.filmorate.dal.dto.response.CreateUserResponse;
+import ru.yandex.practicum.filmorate.dal.dto.response.UpdateUserResponse;
+import ru.yandex.practicum.filmorate.mapper.UserMapper;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.util.*;
 
 @Slf4j
 @Service
+@Validated
 @RequiredArgsConstructor
 public class UserService {
 
-    private final UserStorage userStorage;
+    private final UserRepository userRepository;
 
-    public User createUser(User user) {
-        return userStorage.createUser(user);
+    public CreateUserResponse createUser(CreateUserRequest createUserRequest) {
+        User user = UserMapper.mapToUser(createUserRequest);
+        return userRepository.createUser(user);
     }
 
-    public Collection<User> getAllUsers() {
-        return userStorage.getAllUsers();
-    }
-
-    public User updateUser(User user) {
-        return userStorage.updateUser(user);
-    }
-
-    public void addToFriend(long whomId, long whoId) {
-        if (userStorage.isUserExists(whomId) &&  userStorage.isUserExists(whoId)) {
-            User whom = userStorage.getUserById(whomId);
-            User who = userStorage.getUserById(whoId);
-            whom.getFriends().add(whoId);
-            who.getFriends().add(whomId);
-        } else throw new NotFoundException("User not found");
-    }
-
-    public boolean removeFromFriend(long whomId, long whoId) {
-        if (userStorage.isUserExists(whomId) &&  userStorage.isUserExists(whoId)) {
-            User whom = userStorage.getUserById(whomId);
-            User who = userStorage.getUserById(whoId);
-            if (whom.getFriends() == null) {
-                whom.setFriends(new HashSet<>());
-            }
-            if (who.getFriends() == null) {
-                who.setFriends(new HashSet<>());
-            }
-            whom.getFriends().remove(who.getId());
-            who.getFriends().remove(whom.getId());
-            return true;
-        }
-        throw new NotFoundException("Something went wrong. One of the users may not have been found.");
-    }
-
-    public Collection<User> getUserFriends(long id) {
-        return userStorage.getFriends(id);
-    }
-
-    public Collection<User> getCommonFriends(long firstUserId, long secondUserId) {
-        if (userStorage.isUserExists(firstUserId) &&  userStorage.isUserExists(secondUserId)) {
-            Set<Long> firstUserFriends = userStorage.getUserById(firstUserId).getFriends();
-            Set<Long> secondUserFriends = userStorage.getUserById(secondUserId).getFriends();
-            firstUserFriends.retainAll(secondUserFriends);
-            return userStorage
-                    .getAllUsers()
-                    .stream()
-                    .filter(user -> firstUserFriends.contains(user.getId())).toList();
-        }
-        throw new NotFoundException("User not found");
+    public UpdateUserResponse updateUser(UpdateUserRequest updateUserRequest) {
+        User user = UserMapper.mapToUserFromUpdateUserRequest(updateUserRequest);
+        return userRepository.updateUser(user);
     }
 
     public User getUserById(long id) {
-        return userStorage.getUserById(id);
+        return userRepository.findUserById(id);
+    }
+
+    public Collection<User> getAllUsers() {
+        return userRepository.getAllUsers();
+    }
+
+    public Collection<User> getFriends(String id) {
+        return userRepository.getFriends(Long.parseLong(id));
+    }
+
+
+    public Collection<User> getCommonFriends(String first_User_id, String second_User_id) {
+
+        long fistUserId = Long.parseLong(first_User_id);
+        long secondUserId = Long.parseLong(second_User_id);
+        if (fistUserId == secondUserId) {
+            throw new IllegalArgumentException("The IDs of the first and second users should not be the same");
+        }
+        return userRepository.getCommonFriends(fistUserId, secondUserId);
+    }
+
+    public int addToFriend(long id, long friendId) {
+        return userRepository.addToFriend(id, friendId);
+    }
+
+    public int removeFromFriend(long id, long friendId) {
+        return userRepository.removeFromFriend(id, friendId);
     }
 }

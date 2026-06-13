@@ -22,7 +22,7 @@ public class FilmController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Film postFilm(@Validated(CreateGroup.OnCreate.class) @RequestBody Film film) {
+    public Film postFilm(@Validated(CreateGroup.class) @RequestBody Film film) {
         return filmService.postFilm(film);
     }
 

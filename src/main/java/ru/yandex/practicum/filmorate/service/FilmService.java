@@ -1,14 +1,13 @@
 package ru.yandex.practicum.filmorate.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.ConditionsNotMetException;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
-import ru.yandex.practicum.filmorate.storage.user.UserStorage;
+import ru.yandex.practicum.filmorate.storage.user.AbstractUserRepository;
 
 import java.util.Collection;
 import java.util.Comparator;
@@ -19,7 +18,7 @@ import java.util.stream.Collectors;
 public class FilmService {
 
     private final FilmStorage filmStorage;
-    private final UserStorage userStorage;
+    private final AbstractUserRepository abstractUserRepository;
 
     public Film postFilm(Film film) {
         return filmStorage.postFilm(film);
@@ -34,25 +33,11 @@ public class FilmService {
     }
 
     public Film addLike(long id, long userId) {
-        if (userStorage.isUserExists(userId) && filmStorage.isFilmExists(id)) {
-            Film film = filmStorage.getFilmById(id);
-            User user = userStorage.getUserById(userId);
-            film.setLikes(film.getLikes() + 1);
-            film.getUsersLikes().add(user);
-            return film;
-        } else throw new NotFoundException("Film or user not found");
+        return null;
     }
 
     public Film removeLike(long id, long userId) {
-        if (userStorage.isUserExists(userId) && filmStorage.isFilmExists(id)) {
-            Film film = filmStorage.getFilmById(id);
-            User user = userStorage.getUserById(userId);
-            if (film.getUsersLikes().contains(user)) {
-                film.setLikes(film.getLikes() - 1);
-                film.getUsersLikes().remove(user);
-            } else throw new NotFoundException("Users like not found");
-            return film;
-        } else throw new NotFoundException("Film or user not found");
+        return null;
     }
 
     public Collection<Film> getPopular(Integer count) {

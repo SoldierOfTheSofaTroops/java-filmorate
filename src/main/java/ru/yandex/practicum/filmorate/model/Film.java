@@ -13,26 +13,26 @@ import java.util.Set;
 @Data
 public class Film {
 
-    @Null (groups = CreateGroup.OnCreate.class)
+    @Null (groups = CreateGroup.class)
     @NotNull (groups = UpdateGroup.OnUpdate.class)
     private Long id;
 
-    @NotBlank (groups = CreateGroup.OnCreate.class)
+    @NotBlank (groups = CreateGroup.class)
     private String name;
 
-    @Size(max = 200, groups = CreateGroup.OnCreate.class)
+    @Size(max = 200, groups = CreateGroup.class)
     private String description;
 
-    @NotNull (groups = CreateGroup.OnCreate.class)
-    @FilmReleaseDate (groups = {CreateGroup.OnCreate.class, UpdateGroup.OnUpdate.class})
+    @NotNull (groups = CreateGroup.class)
+    @FilmReleaseDate (groups = {CreateGroup.class, UpdateGroup.OnUpdate.class})
     private LocalDate releaseDate;
 
-    @NotNull (groups = CreateGroup.OnCreate.class)
-    @Positive (groups = {CreateGroup.OnCreate.class, UpdateGroup.OnUpdate.class})
+    @NotNull (groups = CreateGroup.class)
+    @Positive (groups = {CreateGroup.class, UpdateGroup.OnUpdate.class})
     private int duration;
 
     private long likes;
-    private Set<Genre> genres = new HashSet<>();
+    private Set<Genres> genres = new HashSet<>();
     private Set<MPARating> mpaRatings = new HashSet<>();
     private Set<User> usersLikes =  new HashSet<>();
 }

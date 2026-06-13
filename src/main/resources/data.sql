@@ -68,7 +68,9 @@ INSERT INTO filmorate.users_films_likes (film_id, user_id) VALUES
 -- 8. Дружба между пользователями (friendships)
 -- Пользователь 1 отправил заявку пользователю 2 (подтверждено)
 -- Пользователь 2 отправил заявку пользователю 3 (не подтверждено)
+-- Пользователь 1 отправил заявку пользователю 3 (подтверждено)
 INSERT INTO filmorate.friendships (user_id, friend_id, status, request_date, accepted_date)
 VALUES
     (1, 2, 'CONFIRMED', CURRENT_DATE - 5, CURRENT_DATE - 4),
-    (2, 3, 'NOT_CONFIRMED', CURRENT_DATE - 2, NULL);
+    (2, 3, 'NOT_CONFIRMED', CURRENT_DATE - 2, NULL),
+    (1, 3, 'CONFIRMED', CURRENT_DATE - 3, CURRENT_DATE-2);

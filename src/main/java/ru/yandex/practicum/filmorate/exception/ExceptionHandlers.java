@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.Map;
 
-@RestControllerAdvice
+@RestControllerAdvice(basePackages = "ru.yandex.practicum.filmorate.controller")
 public class ExceptionHandlers {
 
     @ExceptionHandler(NotFoundException.class)
