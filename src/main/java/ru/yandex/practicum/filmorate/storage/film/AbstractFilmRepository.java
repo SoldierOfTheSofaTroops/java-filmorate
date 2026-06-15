@@ -1,12 +1,14 @@
 package ru.yandex.practicum.filmorate.storage.film;
 
+import ru.yandex.practicum.filmorate.dal.dto.request.PostFilmRequest;
+import ru.yandex.practicum.filmorate.dal.dto.response.PostFilmResponse;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.Collection;
 
-public interface FilmStorage {
+public interface AbstractFilmRepository {
 
-    Film postFilm(Film film);
+    PostFilmResponse postFilm(Film film);
 
     Collection<Film> getFilms();
 

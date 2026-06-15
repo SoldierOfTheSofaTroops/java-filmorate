@@ -2,34 +2,33 @@ package ru.yandex.practicum.filmorate.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exception.ConditionsNotMetException;
-import ru.yandex.practicum.filmorate.exception.NotFoundException;
+import ru.yandex.practicum.filmorate.dal.dto.request.PostFilmRequest;
+import ru.yandex.practicum.filmorate.dal.dto.response.PostFilmResponse;
+import ru.yandex.practicum.filmorate.exception.exceptions.ConditionsNotMetException;
+import ru.yandex.practicum.filmorate.mapper.FilmMapper;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.film.AbstractFilmRepository;
 import ru.yandex.practicum.filmorate.storage.user.AbstractUserRepository;
 
 import java.util.Collection;
-import java.util.Comparator;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class FilmService {
 
-    private final FilmStorage filmStorage;
-    private final AbstractUserRepository abstractUserRepository;
+    private final AbstractFilmRepository filmRepository;
 
-    public Film postFilm(Film film) {
-        return filmStorage.postFilm(film);
+    public PostFilmResponse postFilm(PostFilmRequest postFilmRequest) {
+        Film film = FilmMapper.mapFromPostFilmRequestToFilm(postFilmRequest);
+        return filmRepository.postFilm(film);
     }
 
     public Collection<Film> getFilms() {
-        return filmStorage.getFilms();
+        return filmRepository.getFilms();
     }
 
     public Film updateFilm(Film film) {
-        return filmStorage.updateFilm(film);
+        return filmRepository.updateFilm(film);
     }
 
     public Film addLike(long id, long userId) {
@@ -41,13 +40,13 @@ public class FilmService {
     }
 
     public Collection<Film> getPopular(Integer count) {
-        if (count > 0) {
-            Collection<Film> films = filmStorage.getFilms();
-            return films.stream()
-                    .sorted(Comparator.comparingLong(Film::getLikes).reversed())
-                    .limit(count)
-                    .collect(Collectors.toList());
-        }
+//        if (count > 0) {
+//            Collection<Film> films = filmStorage.getFilms();
+//            return films.stream()
+//                    .sorted(Comparator.comparingLong(Film::getLikes).reversed())
+//                    .limit(count)
+//                    .collect(Collectors.toList());
+//        }
         throw new ConditionsNotMetException("Incorrect count value");
     }
 }

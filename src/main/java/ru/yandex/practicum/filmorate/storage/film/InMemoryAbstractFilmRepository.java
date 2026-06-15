@@ -1,7 +1,8 @@
 package ru.yandex.practicum.filmorate.storage.film;
 
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.exception.NotFoundException;
+import ru.yandex.practicum.filmorate.dal.dto.response.PostFilmResponse;
+import ru.yandex.practicum.filmorate.exception.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.Collection;
@@ -9,14 +10,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public class InMemoryFilmStorage implements  FilmStorage {
+public class InMemoryAbstractFilmRepository implements AbstractFilmRepository {
 
     private Map<Long, Film> films = new HashMap<>();
 
-    public Film postFilm(Film film) {
-        film.setId(getNextId());
-        films.put(film.getId(), film);
-        return film;
+    public PostFilmResponse postFilm(Film film) {
+//        film.setId(getNextId());
+//        films.put(film.getId(), film);
+        return null;
     }
 
     @Override

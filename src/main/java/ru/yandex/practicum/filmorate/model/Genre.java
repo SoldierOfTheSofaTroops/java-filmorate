@@ -10,10 +10,8 @@ import ru.yandex.practicum.filmorate.validation.groups.UpdateGroup;
 @Data
 public class Genre {
 
-    @Null(groups = CreateGroup.class)
-    @NotNull(groups = UpdateGroup.class)
     private long id;
 
-    @NotBlank(groups = {CreateGroup.class, UpdateGroup.OnUpdate.class})
-    private String name;
+    @NotBlank
+    private String title;
 }

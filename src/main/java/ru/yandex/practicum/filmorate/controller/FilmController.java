@@ -1,13 +1,15 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.dal.dto.request.PostFilmRequest;
+import ru.yandex.practicum.filmorate.dal.dto.response.PostFilmResponse;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
-import ru.yandex.practicum.filmorate.validation.groups.CreateGroup;
 import ru.yandex.practicum.filmorate.validation.groups.UpdateGroup;
 
 import java.util.Collection;
@@ -22,8 +24,8 @@ public class FilmController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Film postFilm(@Validated(CreateGroup.class) @RequestBody Film film) {
-        return filmService.postFilm(film);
+    public PostFilmResponse postFilm(@Valid @RequestBody PostFilmRequest postFilmRequest) {
+        return filmService.postFilm(postFilmRequest);
     }
 
     @GetMapping

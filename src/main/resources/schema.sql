@@ -16,7 +16,8 @@ CREATE TABLE IF NOT EXISTS filmorate.films (
     film_name VARCHAR(50) NOT NULL,
     description VARCHAR(200),
     release_date DATE NOT NULL,
-    duration INTEGER NOT NULL
+    duration INTEGER NOT NULL,
+    CONSTRAINT unique_film_name UNIQUE (film_name)
 );
 
 CREATE TABLE IF NOT EXISTS filmorate.genre(

@@ -24,7 +24,7 @@ public class GenreDbStorageTest {
 
         Genre genre = new  Genre();
         genre.setId(1);
-        genre.setName("Комедия");
+        genre.setTitle("Комедия");
 
         Optional<Genre> genreFromDb = Optional.ofNullable(genreDbStorage.getGenreById(1L));
 

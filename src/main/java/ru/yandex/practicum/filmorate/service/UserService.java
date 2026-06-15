@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import ru.yandex.practicum.filmorate.dal.UserRepository;
-import ru.yandex.practicum.filmorate.dal.dto.UserDTO;
 import ru.yandex.practicum.filmorate.dal.dto.request.CreateUserRequest;
 import ru.yandex.practicum.filmorate.dal.dto.request.UpdateUserRequest;
 import ru.yandex.practicum.filmorate.dal.dto.response.CreateUserResponse;
