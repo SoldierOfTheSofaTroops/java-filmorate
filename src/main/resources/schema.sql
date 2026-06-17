@@ -28,8 +28,9 @@ CREATE TABLE IF NOT EXISTS filmorate.genre(
 
 CREATE TABLE IF NOT EXISTS filmorate.mpa_rating(
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    rating_name VARCHAR(25),
-    CONSTRAINT check_valid_mpa_rating CHECK (rating_name IN ('G', 'PG', 'PG_13', 'R', 'NC_17'))
+    rating_name VARCHAR(10),
+    CONSTRAINT check_valid_mpa_rating
+        CHECK (rating_name IN ('G', 'PG', 'PG-13', 'R', 'NC-17'))
 );
 
 CREATE TABLE IF NOT EXISTS filmorate.film_genre(

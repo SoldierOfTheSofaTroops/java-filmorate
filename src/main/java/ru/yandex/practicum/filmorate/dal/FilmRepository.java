@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.dal.dto;
+package ru.yandex.practicum.filmorate.dal;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.dal.dto.response.PostFilmResponse;
 import ru.yandex.practicum.filmorate.dal.mappers.FilmRowMapper;
+import ru.yandex.practicum.filmorate.exception.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.mapper.FilmMapper;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
@@ -23,6 +24,7 @@ public class FilmRepository implements AbstractFilmRepository {
 
     private final JdbcTemplate jdbcTemplate;
     private final FilmRowMapper filmRowMapper;
+    private final UserRepository userRepository;
 
     @Override
     public PostFilmResponse postFilm(Film film) {
@@ -59,7 +61,8 @@ public class FilmRepository implements AbstractFilmRepository {
 
     @Override
     public Collection<Film> getFilms() {
-        return List.of();
+        String sql = "SELECT * FROM FILMORATE.FILMS";
+        return jdbcTemplate.query(sql, filmRowMapper);
     }
 
     @Override
@@ -70,6 +73,28 @@ public class FilmRepository implements AbstractFilmRepository {
     @Override
     public Film updateFilm(Film film) {
         return null;
+    }
+
+    @Override
+    public int addLike(long filmId, long userId) {
+        String addLikeSql = "INSERT INTO FILMORATE.USERS_FILMS_LIKES(film_id, user_id) VALUES(?, ?)";
+
+        if (isFilmExists(filmId) && userRepository.isUserExists(userId)) {
+            return jdbcTemplate.update(addLikeSql, filmId, userId);
+        }
+
+        throw new NotFoundException("User or film not found");
+    }
+
+    @Override
+    public int removeLike(long filmId, long userId) {
+        String removeLikeSql = "DELETE FROM FILMORATE.USERS_FILMS_LIKES WHERE film_id = ? AND user_id = ?";
+
+        if (isFilmExists(filmId) && userRepository.isUserExists(userId)) {
+            return jdbcTemplate.update(removeLikeSql, filmId, userId);
+        }
+
+        throw new NotFoundException("User or film not found");
     }
 
     @Override

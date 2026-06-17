@@ -8,13 +8,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Component
-public class MPARatingRowMapper implements RowMapper<MPARating> {
-
+public class MpaRowMapper implements RowMapper<MPARating> {
     @Override
     public MPARating mapRow(ResultSet rs, int rowNum) throws SQLException {
-        MPARating mpaRating = new MPARating();
-        mpaRating.setId(rs.getInt("id"));
-        mpaRating.setName(rs.getString("title"));
-        return mpaRating;
+        MPARating mpa = new MPARating();
+        mpa.setId(rs.getInt("id"));
+        mpa.setName(rs.getString("rating_name"));
+        return mpa;
     }
 }

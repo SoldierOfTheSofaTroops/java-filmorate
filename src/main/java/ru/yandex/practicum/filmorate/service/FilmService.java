@@ -31,11 +31,11 @@ public class FilmService {
         return filmRepository.updateFilm(film);
     }
 
-    public Film addLike(long id, long userId) {
-        return null;
+    public int addLike(long filmId, long userId) {
+        return filmRepository.addLike(filmId, userId);
     }
 
-    public Film removeLike(long id, long userId) {
+    public Film removeLike(long filmId, long userId) {
         return null;
     }
 

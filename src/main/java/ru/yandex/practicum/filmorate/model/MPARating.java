@@ -4,8 +4,6 @@ import lombok.Data;
 
 @Data
 public class MPARating {
-
     private int id;
-
-    private String title;
+    private String name;
 }

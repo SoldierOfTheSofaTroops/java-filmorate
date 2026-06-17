@@ -39,6 +39,16 @@ public class InMemoryAbstractFilmRepository implements AbstractFilmRepository {
         } else throw new NotFoundException("Film not found");
     }
 
+    @Override
+    public int addLike(long filmId, long userId) {
+        return 0;
+    }
+
+    @Override
+    public int removeLike(long filmId, long userId) {
+        return 0;
+    }
+
     public boolean isFilmExists(long id) {
         return films.containsKey(id);
     }

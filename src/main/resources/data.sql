@@ -25,11 +25,12 @@ INSERT INTO filmorate.genre (name) VALUES
     ('Триллер');
 
 -- 3. Рейтинги MPA
-INSERT INTO filmorate.mpa_rating (rating_name) VALUES
-    ('G'),
+INSERT INTO filmorate.mpa_rating(rating_name)
+VALUES ('G'),
     ('PG'),
-    ('PG_13'),
-    ('R');
+    ('PG-13'),
+    ('R'),
+    ('NC-17');
 
 -- 4. Фильмы
 INSERT INTO filmorate.films (film_name, description, release_date, duration) VALUES

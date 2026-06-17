@@ -16,5 +16,9 @@ public interface AbstractFilmRepository {
 
     Film updateFilm(Film film);
 
+    int addLike(long filmId, long userId);
+
+    int removeLike(long filmId, long userId);
+
     boolean isFilmExists(long id);
 }
