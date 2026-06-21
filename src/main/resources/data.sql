@@ -21,8 +21,10 @@ INSERT INTO filmorate.users (email, login, user_name, birthday) VALUES
 INSERT INTO filmorate.genre (name) VALUES
     ('Комедия'),
     ('Драма'),
-    ('Фантастика'),
-    ('Триллер');
+    ('Мультфильм'),
+    ('Триллер'),
+    ('Документальный'),
+    ('Боевик');
 
 -- 3. Рейтинги MPA
 INSERT INTO filmorate.mpa_rating(rating_name)

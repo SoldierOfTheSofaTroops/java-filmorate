@@ -1,9 +1,7 @@
-package ru.yandex.practicum.filmorate.dal.dto.request;
+package ru.yandex.practicum.filmorate.dal.dto.request.film.post;
 
 import jakarta.validation.constraints.*;
 import lombok.Data;
-import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.MPARating;
 import ru.yandex.practicum.filmorate.validation.FilmReleaseDate;
 
 import java.time.LocalDate;
@@ -23,6 +21,6 @@ public class PostFilmRequest {
     @NotNull
     @Positive
     private int duration;
-    private MPARating mpa;
-    private List<Genre> genres;
+    private MPAFilmPostRequest mpa;
+    private List<GenreFilmPostRequest> genres;
 }

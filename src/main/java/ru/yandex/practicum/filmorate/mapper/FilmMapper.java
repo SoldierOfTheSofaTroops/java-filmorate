@@ -2,9 +2,14 @@ package ru.yandex.practicum.filmorate.mapper;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import ru.yandex.practicum.filmorate.dal.dto.request.PostFilmRequest;
-import ru.yandex.practicum.filmorate.dal.dto.response.PostFilmResponse;
+import ru.yandex.practicum.filmorate.dal.dto.request.film.post.GenreFilmPostRequest;
+import ru.yandex.practicum.filmorate.dal.dto.request.film.post.PostFilmRequest;
+import ru.yandex.practicum.filmorate.dal.dto.response.film.post.GenrePostFilmResponse;
+import ru.yandex.practicum.filmorate.dal.dto.response.film.post.MPAFilmPostResponse;
+import ru.yandex.practicum.filmorate.dal.dto.response.film.post.PostFilmResponse;
 import ru.yandex.practicum.filmorate.model.Film;
+
+import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FilmMapper {
@@ -15,8 +20,14 @@ public class FilmMapper {
         film.setDescription(postFilmRequest.getDescription());
         film.setReleaseDate(postFilmRequest.getReleaseDate());
         film.setDuration(postFilmRequest.getDuration());
-        film.setGenres(postFilmRequest.getGenres());
-        film.setMpa(postFilmRequest.getMpa());
+        if (postFilmRequest.getGenres() != null) {
+            film.setGenres(postFilmRequest
+                    .getGenres()
+                    .stream()
+                    .map(GenreFilmPostRequest::getId)
+                    .collect(Collectors.toList()));
+        }
+        film.setMpa(postFilmRequest.getMpa().getId());
         return film;
     }
 
@@ -27,8 +38,11 @@ public class FilmMapper {
         postFilmResponse.setDescription(film.getDescription());
         postFilmResponse.setReleaseDate(film.getReleaseDate());
         postFilmResponse.setDuration(film.getDuration());
-        postFilmResponse.setGenres(film.getGenres());
-        postFilmResponse.setMpa(film.getMpa());
+        postFilmResponse.setGenres(film.getGenres()
+                .stream()
+                .map(GenrePostFilmResponse::new)
+                .toList());
+        postFilmResponse.setMpa(new MPAFilmPostResponse(film.getMpa()));
         return postFilmResponse;
     }
 }

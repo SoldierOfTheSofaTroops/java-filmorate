@@ -1,9 +1,10 @@
 package ru.yandex.practicum.filmorate.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 @Data
 public class MPARating {
-    private int id;
+    private Long id;
     private String name;
 }

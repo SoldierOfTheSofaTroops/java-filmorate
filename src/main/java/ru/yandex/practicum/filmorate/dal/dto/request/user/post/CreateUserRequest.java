@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.dal.dto.request;
+package ru.yandex.practicum.filmorate.dal.dto.request.user.post;
 
 import jakarta.validation.constraints.*;
 import lombok.Data;

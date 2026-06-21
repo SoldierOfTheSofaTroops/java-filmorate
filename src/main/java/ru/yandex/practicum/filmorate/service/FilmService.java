@@ -2,13 +2,12 @@ package ru.yandex.practicum.filmorate.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.dal.dto.request.PostFilmRequest;
-import ru.yandex.practicum.filmorate.dal.dto.response.PostFilmResponse;
+import ru.yandex.practicum.filmorate.dal.dto.request.film.post.PostFilmRequest;
+import ru.yandex.practicum.filmorate.dal.dto.response.film.post.PostFilmResponse;
 import ru.yandex.practicum.filmorate.exception.exceptions.ConditionsNotMetException;
 import ru.yandex.practicum.filmorate.mapper.FilmMapper;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.film.AbstractFilmRepository;
-import ru.yandex.practicum.filmorate.storage.user.AbstractUserRepository;
 
 import java.util.Collection;
 

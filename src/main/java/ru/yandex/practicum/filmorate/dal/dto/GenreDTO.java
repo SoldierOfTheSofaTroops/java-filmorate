@@ -1,15 +1,15 @@
 package ru.yandex.practicum.filmorate.dal.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class MpaDTO {
+public class GenreDTO {
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @NotBlank
     private String name;
+
 }

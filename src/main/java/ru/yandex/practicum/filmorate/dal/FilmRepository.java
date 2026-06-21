@@ -4,16 +4,19 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import ru.yandex.practicum.filmorate.dal.dto.response.PostFilmResponse;
+import ru.yandex.practicum.filmorate.dal.dto.response.film.post.PostFilmResponse;
 import ru.yandex.practicum.filmorate.dal.mappers.FilmRowMapper;
 import ru.yandex.practicum.filmorate.exception.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.mapper.FilmMapper;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.MPARating;
+import ru.yandex.practicum.filmorate.service.GenreService;
 import ru.yandex.practicum.filmorate.storage.film.AbstractFilmRepository;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.*;
 
 @Slf4j
@@ -25,38 +28,52 @@ public class FilmRepository implements AbstractFilmRepository {
     private final JdbcTemplate jdbcTemplate;
     private final FilmRowMapper filmRowMapper;
     private final UserRepository userRepository;
+    private final MPARepository mpaRepository;
+    private final GenreService genreService;
 
     @Override
     public PostFilmResponse postFilm(Film film) {
-        String insertFilmSql = "INSERT INTO FILMORATE.FILMS(film_name, description, release_date, duration) " +
-                     "VALUES(?, ?, ?, ?)";
+
+        if (Optional.ofNullable(mpaRepository.getMpaById(film.getMpa())).isEmpty()) {
+            throw new NotFoundException("MPA with id " + film.getMpa() + " not found");
+        }
+
+        if (!film.getGenres().isEmpty()) {
+            for(Long genreId : film.getGenres()){
+                if (genreService.getGenreById(String.valueOf(genreId)) == null) {
+                    throw new NotFoundException("Genre with id " + genreId + " not found");
+                }
+            }
+        }
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        List<Long> genres = film.getGenres();
+        Long mpaRating = film.getMpa();
+
+        String insertFilmSql = "INSERT INTO FILMORATE.FILMS(film_name, description, release_date, duration) VALUES(?, ?, ?, ?)";
         String insertFilmGenreSql = "INSERT INTO FILMORATE.FILM_GENRE(film_id, genre_id) VALUES(?, ?)";
         String insertFilmMPARating = "INSERT INTO FILMORATE.FILM_MPA_RATING(film_id, film_mparating) VALUES(?, ?)";
-        List<Genre> genres = film.getGenres();
-        MPARating mpaRating = film.getMpa();
 
-        int insertFilmResult = jdbcTemplate.update(insertFilmSql,
-                film.getName(),
-                film.getDescription(),
-                film.getReleaseDate(),
-                film.getDuration());
+        jdbcTemplate.update(con -> {
+            PreparedStatement preparedStatement =
+                    con.prepareStatement(insertFilmSql, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, film.getName());
+            preparedStatement.setString(2, film.getDescription());
+            preparedStatement.setObject(3, film.getReleaseDate());
+            preparedStatement.setInt(4, film.getDuration());
+            return preparedStatement;}, keyHolder);
 
+        Long filmId = Objects.requireNonNull(keyHolder.getKey()).longValue();
 
-        if (insertFilmResult < 1) {
-            throw new  IllegalStateException("Film could not be inserted");
+        for (Long genreId : genres) {
+            jdbcTemplate.update(insertFilmGenreSql, filmId, genreId);
         }
 
-        for (Genre genre : genres) {
-            jdbcTemplate.update(insertFilmGenreSql, film.getId(), genre.getId());
-        }
+        jdbcTemplate.update(insertFilmMPARating, filmId, mpaRating);
 
-            jdbcTemplate.update(insertFilmMPARating, film.getId(), mpaRating.getId());
-
-//        Optional<Film> lastInsertedFilm =
-//                Optional.ofNullable(jdbcTemplate.queryForObject(insertFilmSql, filmRowMapper, film.getName()));
+        film.setId(filmId);
 
         return FilmMapper.mapFromFilmToPostFilmResponse(film);
-
     }
 
     @Override

@@ -16,17 +16,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @AutoConfigureTestDatabase
 @RequiredArgsConstructor
-public class GenreDbStorageTest {
-    private final GenreDbStorage genreDbStorage;
+public class GenreRepositoryTest {
+    private final GenreRepository genreRepository;
 
     @Test
     public void getGenreByIdTest() {
 
         Genre genre = new  Genre();
         genre.setId(1);
-        genre.setTitle("Комедия");
+        genre.setName("Комедия");
 
-        Optional<Genre> genreFromDb = Optional.ofNullable(genreDbStorage.getGenreById(1L));
+        Optional<Genre> genreFromDb = Optional.ofNullable(genreRepository.getGenreById(1L));
 
         assertThat(genreFromDb).isPresent().get().isEqualTo(genre);
     }
