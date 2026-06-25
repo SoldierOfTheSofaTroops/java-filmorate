@@ -4,9 +4,12 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.dal.dto.response.film.post.PostFilmResponse;
 import ru.yandex.practicum.filmorate.exception.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.MPARating;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -47,6 +50,31 @@ public class InMemoryAbstractFilmRepository implements AbstractFilmRepository {
     @Override
     public int removeLike(long filmId, long userId) {
         return 0;
+    }
+
+    @Override
+    public MPARating getMpaById(long mpaId) {
+        return null;
+    }
+
+    @Override
+    public Collection<MPARating> getAllMPA() {
+        return null;
+    }
+
+    @Override
+    public Genre getGenreById(long id) {
+        return null;
+    }
+
+    @Override
+    public Collection<Genre> getAllGenres() {
+        return List.of();
+    }
+
+    @Override
+    public Film getFilmWithGenre(long filmId) {
+        return null;
     }
 
     public boolean isFilmExists(long id) {
